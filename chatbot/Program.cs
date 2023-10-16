@@ -1,6 +1,18 @@
+using chatbot;
+using chatbot.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+builder.Services.AddDbContext<BancoContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllersWithViews();
 
