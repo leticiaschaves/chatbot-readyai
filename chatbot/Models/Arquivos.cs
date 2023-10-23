@@ -7,5 +7,7 @@
         public byte ConteudoData { get; set; }
         public bool Situacao { get; set; }
         public int IdMensagem { get; set; }
+        public int ConversaId { get; set; }
+        public Conversa Conversa { get; set; }
     }
 }

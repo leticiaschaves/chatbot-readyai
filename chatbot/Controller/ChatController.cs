@@ -15,18 +15,28 @@ namespace Chatbot.Controller
             _context = context;
         }
 
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("conversas")]
+        public IActionResult ListarConversas()
         {
-            // Este endpoint não tem implementação específica, retorna valores de exemplo.
-            return new string[] { "valor1", "valor2" };
+            var conversas = _context.Conversas.ToList();
+            return Ok(conversas);
         }
 
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("conversa/{conversaId}/mensagens")]
+        public IActionResult GetMensagensDaConversa(int conversaId)
         {
-            // Este endpoint não tem implementação específica, retorna um valor de exemplo.
-            return "valor";
+            // Verifica se a conversa existe
+            var conversa = _context.Conversas.FirstOrDefault(conversation => conversation.Id == conversaId);
+
+            if (conversa == null)
+            {
+                return NotFound(); // Retorna um status 404 se a conversa não for encontrada
+            }
+
+            // Busca todas as mensagens associadas à conversa
+            var mensagensDaConversa = _context.Mensagens.Where(message => message.ConversaId == conversaId).ToList();
+
+            return Ok(mensagensDaConversa);
         }
 
         [HttpPost("conversa")]
@@ -49,7 +59,7 @@ namespace Chatbot.Controller
         }
 
         [HttpPost("mensagem")]
-        public IActionResult SendMessage([FromBody] Mensagens mensagem)
+        public IActionResult SaveMessage([FromBody] Mensagens mensagem)
         {
             if (ModelState.IsValid)
             {
@@ -60,7 +70,8 @@ namespace Chatbot.Controller
                     EResumo = mensagem.EResumo,
                     Mensagem = mensagem.Mensagem,
                     Situacao = true, // Define o status inicial como 'true'
-                    IdMensagem = mensagem.IdMensagem // Associa a mensagem pai, se aplicável
+                    IdMensagem = mensagem.IdMensagem, // Associa a mensagem pai, se aplicável
+                    ConversaId = mensagem.ConversaId
                 };
 
                 _context.Mensagens.Add(novaMensagem);
@@ -83,7 +94,8 @@ namespace Chatbot.Controller
                     ConteudoLink = arquivos.ConteudoLink,
                     ConteudoData = arquivos.ConteudoData, // O conteúdo real do arquivo como array de bytes
                     Situacao = true, // Define o status inicial como 'true'
-                    IdMensagem = arquivos.IdMensagem // Associa o arquivo a uma mensagem
+                    IdMensagem = arquivos.IdMensagem, // Associa o arquivo a uma mensagem
+                    ConversaId = arquivos.ConversaId
                 };
 
                 _context.Arquivos.Add(novoArquivo);
