@@ -1,4 +1,6 @@
 import { useRef, useState } from "react";
+import { useDispatch } from 'react-redux';
+import { fetchOpenAIResponse } from "../redux/actions/actions";
 import {
   HiCheck,
   HiOutlineChatAlt,
@@ -10,27 +12,32 @@ import {
 import { FaRobot } from "react-icons/fa6";
 import { ImSpinner8 } from "react-icons/im";
 import { nanoid } from "nanoid";
-
 import "./Chatbot.css";
 
 const Chatbot = () => {
-  const uploader = useRef(null);
-
+  const uploaderRef = useRef(null); // Renamed 'uploader' to 'uploaderRef'
+  const dispatch = useDispatch();
   const [chats, setChats] = useState([]);
-  const [chat_input, setChatInput] = useState("");
-  const [chats_history, setChatsHistory] = useState([
+  const [chatInput, setChatInput] = useState(""); // Renamed 'chat_input' to 'chatInput'
+  const [chatsHistory, setChatsHistory] = useState([
     {
-      chat_title: "Como usar o chatgpcubo",
-      created_at: Date.now(),
+      chatTitle: "Como usar o chatgpcubo", // Renamed 'chat_title' to 'chatTitle'
+      createdAt: Date.now(),
       id: nanoid(),
       loading: false,
     },
   ]);
 
+
+  const handleOpenAIRequest = (userInput) => {
+    dispatch(fetchOpenAIResponse(userInput));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    handleOpenAIRequest(chatInput);
 
-    if (!chat_input) return;
+    if (!chatInput) return;
 
     const id = nanoid();
 
@@ -38,8 +45,8 @@ const Chatbot = () => {
     setChats((c) => [
       ...c,
       {
-        message: chat_input,
-        sent_at: Date.now(),
+        message: chatInput,
+        sentAt: Date.now(),
         id,
         sending: true,
         sender: "me",
@@ -63,7 +70,7 @@ const Chatbot = () => {
       {
         id: nanoid(),
         message: "oi eu sou o chatgpcubo",
-        sent_at: Date.now(),
+        sentAt: Date.now(),
         sending: false,
         sender: "bot",
       },
@@ -102,7 +109,6 @@ const Chatbot = () => {
         sender === "me" ? (
           <li key={id} className="message me">
             <span>{message}</span>
-
             <div className={`state${sending ? " sending" : ""}`}>
               {!sending ? <HiCheck /> : <ImSpinner8 />}
             </div>
@@ -110,7 +116,6 @@ const Chatbot = () => {
         ) : (
           <li key={id} className="message bot">
             <FaRobot />
-
             <span>{message}</span>
           </li>
         )
@@ -120,17 +125,14 @@ const Chatbot = () => {
 
   const renderChatsHistory = () => (
     <ul>
-      {chats_history.map(({ id, chat_title, loading }) => (
+      {chatsHistory.map(({ id, chatTitle, loading }) => (
         <li key={id}>
           <a href={`?chat-id=${id}`}>
             <HiOutlineChatAlt />
-
-            <span>{chat_title}</span>
-
+            <span>{chatTitle}</span>
             <button
               onClick={(e) => {
                 e.preventDefault();
-
                 if (!loading) handleRemoveChatHistory(id);
               }}
               disabled={loading}
@@ -144,51 +146,45 @@ const Chatbot = () => {
   );
 
   return (
-<main className="main-page">
-      <aside className="sidebar">
-        <button type="button" onClick={handleCreateChatHistory}>
-          <HiOutlinePlus />
-          New chat
-        </button>
-
-        {renderChatsHistory()}
-      </aside>
-
-      <div className="main-chat-wrapper">
-        {renderChats()}
-
-        <form onSubmit={handleSubmit}>
-          <div className="input-wrapper">
-            <input
-              label="message"
-              placeholder="Send a message"
-              onChange={(e) => setChatInput(e.target.value)}
-              value={chat_input}
-            />
-
-            {uploader.current?.value && <span>{uploader.current?.value}</span>}
-
-            <button
-              className="form-button"
-              type="button"
-              onClick={() => {
-                uploader.current.click();
-              }}
-            >
-              <HiOutlinePaperClip />
-            </button>
-
-            <button
-              className="form-button"
-              type="submit"
-              onClick={handleSubmit}
-            >
-              <HiOutlinePaperAirplane />
-            </button>
-          </div>
-        </form>
-      </div>
-      <input ref={uploader} type="file" />
+    <main className="main-page">
+        <aside className="sidebar">
+          <button type="button" onClick={handleCreateChatHistory}>
+            <HiOutlinePlus />
+            New chat
+          </button>
+          {renderChatsHistory()}
+        </aside>
+        <div className="main-chat-wrapper">
+          {renderChats()}
+          <form onSubmit={handleSubmit}>
+            <div className="input-wrapper">
+              <input
+                label="message"
+                placeholder="Send a message"
+                onChange={(e) => setChatInput(e.target.value)}
+                value={chatInput}
+              />
+              {uploaderRef .current?.value && <span>{uploaderRef .current?.value}</span>}
+              <button
+                className="form-button"
+                type="button"
+                onClick={() => {
+                  uploaderRef .current.click();
+                }}
+              >
+                <HiOutlinePaperClip />
+              </button>
+              <button
+                className="form-button"
+                type="submit"
+                onClick={handleSubmit}
+              >
+                <HiOutlinePaperAirplane />
+              </button>
+            </div>
+          </form>
+        </div>
+        <input ref={uploaderRef } type="file" />
     </main>
   );
 };
