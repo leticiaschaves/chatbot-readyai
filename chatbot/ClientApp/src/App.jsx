@@ -1,5 +1,5 @@
 import './App.css'
-import Chatbot from './components/Chatbot'
+import { Chatbot } from './components/Chatbot'
 import { Provider } from 'react-redux/es'
 import store from './redux/store'
 

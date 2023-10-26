@@ -14,7 +14,7 @@ import { ImSpinner8 } from "react-icons/im";
 import { nanoid } from "nanoid";
 import "./Chatbot.css";
 
-const Chatbot = () => {
+export const Chatbot = () => {
   const uploaderRef = useRef(null); // Renamed 'uploader' to 'uploaderRef'
   const dispatch = useDispatch();
   const [chats, setChats] = useState([]);
@@ -28,16 +28,13 @@ const Chatbot = () => {
     },
   ]);
 
-
-  const handleOpenAIRequest = (userInput) => {
-    dispatch(fetchOpenAIResponse(userInput));
-  };
+  const disabled = chats.find(chat => chat.sending)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    handleOpenAIRequest(chatInput);
-
+    console.log(chatInput);
     if (!chatInput) return;
+    if (disabled) return;
 
     const id = nanoid();
 
@@ -52,29 +49,32 @@ const Chatbot = () => {
         sender: "me",
       },
     ]);
+    try {
+      const chatgptresposta = await fetchOpenAIResponse(chatInput, chats)
 
-    await new Promise((res) => {
-      setTimeout(res, 1000);
-    });
+      setChats((c) => [
+        ...c.map((chat) => (chat.id === id ? { ...chat, sending: false } : chat)),
+        {
+          id: nanoid(),
+          message: chatgptresposta.choices[0].message.content,
+          sentAt: Date.now(),
+          sending: false,
+          sender: "bot",
+        },
+      ]);
+    } catch (e) {
+      setChats((c) => [
+        ...c.map((chat) => (chat.id === id ? { ...chat, sending: false } : chat)),
+        {
+          id: nanoid(),
+          message: "errei fui mlk",
+          sentAt: Date.now(),
+          sending: false,
+          sender: "bot",
+        },
+      ]);
+    }
 
-    setChats((c) =>
-      c.map((chat) => (chat.id === id ? { ...chat, sending: false } : chat))
-    );
-
-    await new Promise((res) => {
-      setTimeout(res, 500);
-    });
-
-    setChats((c) => [
-      ...c,
-      {
-        id: nanoid(),
-        message: "oi eu sou o chatgpcubo",
-        sentAt: Date.now(),
-        sending: false,
-        sender: "bot",
-      },
-    ]);
   };
 
   const handleRemoveChatHistory = async (id) => {
@@ -147,46 +147,46 @@ const Chatbot = () => {
 
   return (
     <main className="main-page">
-        <aside className="sidebar">
-          <button type="button" onClick={handleCreateChatHistory}>
-            <HiOutlinePlus />
-            New chat
-          </button>
-          {renderChatsHistory()}
-        </aside>
-        <div className="main-chat-wrapper">
-          {renderChats()}
-          <form onSubmit={handleSubmit}>
-            <div className="input-wrapper">
-              <input
-                label="message"
-                placeholder="Send a message"
-                onChange={(e) => setChatInput(e.target.value)}
-                value={chatInput}
-              />
-              {uploaderRef .current?.value && <span>{uploaderRef .current?.value}</span>}
-              <button
-                className="form-button"
-                type="button"
-                onClick={() => {
-                  uploaderRef .current.click();
-                }}
-              >
-                <HiOutlinePaperClip />
-              </button>
-              <button
-                className="form-button"
-                type="submit"
-                onClick={handleSubmit}
-              >
-                <HiOutlinePaperAirplane />
-              </button>
-            </div>
-          </form>
-        </div>
-        <input ref={uploaderRef } type="file" />
+      <aside className="sidebar">
+        <button type="button" onClick={handleCreateChatHistory}>
+          <HiOutlinePlus />
+          New chat
+        </button>
+        {renderChatsHistory()}
+      </aside>
+      <div className="main-chat-wrapper">
+        {renderChats()}
+        <form onSubmit={handleSubmit}>
+          <div className="input-wrapper">
+            <input
+              label="message"
+              placeholder="Send a message"
+              onChange={(e) => setChatInput(e.target.value)}
+              value={chatInput}
+            />
+            {uploaderRef.current?.value && <span>{uploaderRef.current?.value}</span>}
+            <button
+              className="form-button"
+              type="button"
+              onClick={() => {
+                uploaderRef.current.click();
+              }}
+            >
+              <HiOutlinePaperClip />
+            </button>
+            <button
+              className="form-button"
+              type="submit"
+              onClick={handleSubmit}
+            >
+              <HiOutlinePaperAirplane />
+            </button>
+          </div>
+        </form>
+      </div>
+      <input ref={uploaderRef} type="file" />
     </main>
   );
-};
+}
 
-export default Chatbot;
+
