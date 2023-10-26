@@ -16,43 +16,32 @@ const requestFailure = (error) => ({
 });
 
 export const addMessage = (text, type) => ({
-  type: type === "user" ? SEND_MESSAGE : RECEIVE_MESSAGE,
-  payload: text,
+    type: type === "user" ? SEND_MESSAGE : RECEIVE_MESSAGE,
+    payload: text,
 });
 
-export const fetchOpenAIResponse = (prompt) => {
-    return async (dispatch) => {
-        try {
-            dispatch(requestStart());
+export const fetchOpenAIResponse = async (prompt, chats) => {
+    const apiKey = import.meta.env.VITE_OPENAIAPIKEY;
+    const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
-            const apiKey = 'YOUR_API_KEY';
-            const apiUrl = 'https://api.openai.com/v1/engines/text-davinci-002/completions';
+    const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+    };  
 
-            const headers = {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${apiKey}`,
-            };
+    const requestBody = JSON.stringify({
+        model: "gpt-3.5-turbo",
+        messages: [{role:"system",content:"you are an objective brazilian assistant helper"},...chats.map(c => ({ role: c.sender === "me" ? "user" : "assistant", content: c.message })), { role: "system", content: prompt }],
+        max_tokens: 200,
+    });
 
-            const requestBody = JSON.stringify({
-                prompt: prompt,
-                max_tokens: 50,
-            });
+    const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: headers,
+        body: requestBody,
+    });
+    if (response.status !== 200) throw new Error("deu erro")
+    return response.json()
 
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: headers,
-                body: requestBody,
-            });
 
-            if (!response.ok) {
-                throw new Error('Request failed');
-            }
-
-            const data = await response.json();
-            dispatch(requestSuccess(data.choices[0].text.trim()));
-            dispatch(addMessage(data.choices[0].text.trim(), "bot"));
-        } catch (error) {
-            dispatch(requestFailure(error));
-        }
-    };
 };

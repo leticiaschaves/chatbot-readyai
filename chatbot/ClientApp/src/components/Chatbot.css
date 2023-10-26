@@ -98,6 +98,7 @@ body {
   height: 100%;
   padding: 32px 0;
   margin: auto;
+  gap: 8px;
 }
 
 .main-chat-wrapper ul {
@@ -107,6 +108,9 @@ body {
   gap: 8px;
   flex: 1;
   list-style: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-inline: 20px
 }
 
 .main-chat-wrapper ul li {
@@ -183,6 +187,11 @@ body {
   background-color: #3a3e39;
   margin-right: auto;
   margin-left: 8px;
+}
+
+.message.bot span {
+  text-align: start;
+
 }
 
 .message.bot>svg {
