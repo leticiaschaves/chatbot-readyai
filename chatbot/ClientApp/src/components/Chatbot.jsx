@@ -1,80 +1,76 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch } from 'react-redux';
 import { fetchOpenAIResponse } from "../redux/actions/actions";
-import {
-  HiCheck,
-  HiOutlineChatAlt,
-  HiOutlinePaperAirplane,
-  HiOutlinePaperClip,
-  HiOutlinePlus,
-  HiOutlineTrash,
-} from "react-icons/hi";
-import { FaRobot } from "react-icons/fa6";
-import { ImSpinner8 } from "react-icons/im";
 import { nanoid } from "nanoid";
+import { HiOutlinePlus } from "react-icons/hi";
+import ChatInput from "./ChatInput";
+import ChatHistoryList from "./ChatHistoryList";
+import ChatMessage from "./ChatMessage";
 import "./Chatbot.css";
 
-export const Chatbot = () => {
-  const uploaderRef = useRef(null); // Renamed 'uploader' to 'uploaderRef'
+const Chatbot = () => {
+  const uploaderRef = useRef(null);
   const dispatch = useDispatch();
+
   const [chats, setChats] = useState([]);
-  const [chatInput, setChatInput] = useState(""); // Renamed 'chat_input' to 'chatInput'
+  const [chatInput, setChatInput] = useState("");
   const [chatsHistory, setChatsHistory] = useState([
     {
-      chatTitle: "Como usar o chatgpcubo", // Renamed 'chat_title' to 'chatTitle'
+      chatTitle: "Como usar o chatgpcubo",
       createdAt: Date.now(),
       id: nanoid(),
       loading: false,
     },
   ]);
 
-  const disabled = chats.find(chat => chat.sending)
+  const disabled = chats.find(chat => chat.sending);
+
+  const handleAddChat = (newChat) => {
+    setChats((c) => [
+      ...c,
+      newChat,
+    ]);
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(chatInput);
-    if (!chatInput) return;
-    if (disabled) return;
+
+    if (!chatInput || disabled) return;
 
     const id = nanoid();
-
     setChatInput("");
-    setChats((c) => [
-      ...c,
-      {
-        message: chatInput,
-        sentAt: Date.now(),
-        id,
-        sending: true,
-        sender: "me",
-      },
-    ]);
+
+    const newMeMessage = {
+      message: chatInput,
+      sentAt: Date.now(),
+      id,
+      sending: true,
+      sender: "me",
+    };
+    handleAddChat(newMeMessage);
+
     try {
-      const chatgptresposta = await fetchOpenAIResponse(chatInput, chats)
-
-      setChats((c) => [
-        ...c.map((chat) => (chat.id === id ? { ...chat, sending: false } : chat)),
-        {
-          id: nanoid(),
-          message: chatgptresposta.choices[0].message.content,
-          sentAt: Date.now(),
-          sending: false,
-          sender: "bot",
-        },
-      ]);
+      const chatgptresposta = await fetchOpenAIResponse(chatInput, chats);
+      console.log('user', chatInput);
+      console.log('bot', chatgptresposta.choices[0].message.content)
+      const botMessage = {
+        id: nanoid(),
+        message: chatgptresposta.choices[0].message.content,
+        sentAt: Date.now(),
+        sending: false,
+        sender: "bot",
+      };
+      handleAddChat(botMessage);
     } catch (e) {
-      setChats((c) => [
-        ...c.map((chat) => (chat.id === id ? { ...chat, sending: false } : chat)),
-        {
-          id: nanoid(),
-          message: "errei fui mlk",
-          sentAt: Date.now(),
-          sending: false,
-          sender: "bot",
-        },
-      ]);
+      const errorMessage = {
+        id: nanoid(),
+        message: "errei fui mlk",
+        sentAt: Date.now(),
+        sending: false,
+        sender: "bot",
+      };
+      handleAddChat(errorMessage);
     }
-
   };
 
   const handleRemoveChatHistory = async (id) => {
@@ -95,55 +91,13 @@ export const Chatbot = () => {
     setChatsHistory((h) => [
       ...h,
       {
-        chat_title: "New chat",
-        created_at: Date.now(),
+        chatTitle: "New chat",
+        createdAt: Date.now(),
         id: nanoid(),
         loading: false,
       },
     ]);
   };
-
-  const renderChats = () => (
-    <ul>
-      {chats.map(({ id, message, sending, sender }) =>
-        sender === "me" ? (
-          <li key={id} className="message me">
-            <span>{message}</span>
-            <div className={`state${sending ? " sending" : ""}`}>
-              {!sending ? <HiCheck /> : <ImSpinner8 />}
-            </div>
-          </li>
-        ) : (
-          <li key={id} className="message bot">
-            <FaRobot />
-            <span>{message}</span>
-          </li>
-        )
-      )}
-    </ul>
-  );
-
-  const renderChatsHistory = () => (
-    <ul>
-      {chatsHistory.map(({ id, chatTitle, loading }) => (
-        <li key={id}>
-          <a href={`?chat-id=${id}`}>
-            <HiOutlineChatAlt />
-            <span>{chatTitle}</span>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                if (!loading) handleRemoveChatHistory(id);
-              }}
-              disabled={loading}
-            >
-              {loading ? <ImSpinner8 /> : <HiOutlineTrash />}
-            </button>
-          </a>
-        </li>
-      ))}
-    </ul>
-  );
 
   return (
     <main className="main-page">
@@ -152,41 +106,20 @@ export const Chatbot = () => {
           <HiOutlinePlus />
           New chat
         </button>
-        {renderChatsHistory()}
+        <ChatHistoryList chatsHistory={chatsHistory} handleRemoveChatHistory={handleRemoveChatHistory} />
       </aside>
       <div className="main-chat-wrapper">
-        {renderChats()}
-        <form onSubmit={handleSubmit}>
-          <div className="input-wrapper">
-            <input
-              label="message"
-              placeholder="Send a message"
-              onChange={(e) => setChatInput(e.target.value)}
-              value={chatInput}
-            />
-            {uploaderRef.current?.value && <span>{uploaderRef.current?.value}</span>}
-            <button
-              className="form-button"
-              type="button"
-              onClick={() => {
-                uploaderRef.current.click();
-              }}
-            >
-              <HiOutlinePaperClip />
-            </button>
-            <button
-              className="form-button"
-              type="submit"
-              onClick={handleSubmit}
-            >
-              <HiOutlinePaperAirplane />
-            </button>
-          </div>
-        </form>
+        <ChatMessage chats={chats} />
+        <ChatInput
+          chatInput={chatInput}
+          setChatInput={setChatInput}
+          uploaderRef={uploaderRef}
+          handleSubmit={handleSubmit}
+        />
       </div>
       <input ref={uploaderRef} type="file" />
     </main>
   );
-}
+};
 
-
+export default Chatbot;

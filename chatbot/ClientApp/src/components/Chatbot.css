@@ -191,7 +191,6 @@ body {
 
 .message.bot span {
   text-align: start;
-
 }
 
 .message.bot>svg {
@@ -202,6 +201,17 @@ body {
 
 .message.me .state {
   right: -24px;
+}
+
+.message.bot .state {
+  left: -24px;
+}
+
+.robot-icon {
+  display: flex;
+  font-size: 18px;
+  width: 20px;
+  margin-right: 10px;
 }
 
 .message .state {
