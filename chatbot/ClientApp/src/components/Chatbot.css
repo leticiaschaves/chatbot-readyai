@@ -123,6 +123,8 @@ body {
   align-items: center;
   gap: 8px;
   width: 100%;
+
+  padding-inline: 20px
 }
 
 .main-chat-wrapper form .input-wrapper {
