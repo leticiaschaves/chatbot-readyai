@@ -1,5 +1,4 @@
-import React, { useRef, useState } from "react";
-import { useDispatch } from 'react-redux';
+import { useRef, useState } from "react";
 import { fetchOpenAIResponse } from "../redux/actions/actions";
 import { nanoid } from "nanoid";
 import { HiOutlinePlus } from "react-icons/hi";
@@ -10,7 +9,6 @@ import "./Chatbot.css";
 
 const Chatbot = () => {
   const uploaderRef = useRef(null);
-  const dispatch = useDispatch();
 
   const [chats, setChats] = useState([]);
   const [chatInput, setChatInput] = useState("");
@@ -23,14 +21,7 @@ const Chatbot = () => {
     },
   ]);
 
-  const disabled = chats.find(chat => chat.sending);
-
-  const handleAddChat = (newChat) => {
-    setChats((c) => [
-      ...c,
-      newChat,
-    ]);
-  }
+  const disabled = chats.find((chat) => chat.sending);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,12 +38,14 @@ const Chatbot = () => {
       sending: true,
       sender: "me",
     };
-    handleAddChat(newMeMessage);
+
+    setChats((c) => [...c, newMeMessage]);
 
     try {
       const chatgptresposta = await fetchOpenAIResponse(chatInput, chats);
-      console.log('user', chatInput);
-      console.log('bot', chatgptresposta.choices[0].message.content)
+      console.log("user", chatInput);
+      console.log("bot", chatgptresposta.choices[0].message.content);
+
       const botMessage = {
         id: nanoid(),
         message: chatgptresposta.choices[0].message.content,
@@ -60,7 +53,13 @@ const Chatbot = () => {
         sending: false,
         sender: "bot",
       };
-      handleAddChat(botMessage);
+
+      setChats((c) => [
+        ...c.map((chat) =>
+          chat.id === id ? { ...chat, sending: false } : chat
+        ),
+        botMessage,
+      ]);
     } catch (e) {
       const errorMessage = {
         id: nanoid(),
@@ -69,7 +68,13 @@ const Chatbot = () => {
         sending: false,
         sender: "bot",
       };
-      handleAddChat(errorMessage);
+
+      setChats((c) => [
+        ...c.map((chat) =>
+          chat.id === id ? { ...chat, sending: false } : chat
+        ),
+        errorMessage,
+      ]);
     }
   };
 
@@ -106,7 +111,10 @@ const Chatbot = () => {
           <HiOutlinePlus />
           New chat
         </button>
-        <ChatHistoryList chatsHistory={chatsHistory} handleRemoveChatHistory={handleRemoveChatHistory} />
+        <ChatHistoryList
+          chatsHistory={chatsHistory}
+          handleRemoveChatHistory={handleRemoveChatHistory}
+        />
       </aside>
       <div className="main-chat-wrapper">
         <ChatMessage chats={chats} />
