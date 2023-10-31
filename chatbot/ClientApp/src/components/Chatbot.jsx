@@ -5,13 +5,14 @@ import { HiOutlinePlus } from "react-icons/hi";
 import ChatInput from "./ChatInput";
 import ChatHistoryList from "./ChatHistoryList";
 import ChatMessage from "./ChatMessage";
+import RecordAudio from "./RecordAudio";
 import "./Chatbot.css";
 
 const Chatbot = () => {
   const uploaderRef = useRef(null);
-
   const [chats, setChats] = useState([]);
   const [chatInput, setChatInput] = useState("");
+  const [audioRecording, setAudioRecording] = useState(null); // Novo estado para o áudio gravado
   const [chatsHistory, setChatsHistory] = useState([
     {
       chatTitle: "Como usar o chatgpcubo",
@@ -44,22 +45,35 @@ const Chatbot = () => {
     try {
       const chatgptresposta = await fetchOpenAIResponse(chatInput, chats);
       console.log("user", chatInput);
-      console.log("bot", chatgptresposta.choices[0].message.content);
 
-      const botMessage = {
-        id: nanoid(),
-        message: chatgptresposta.choices[0].message.content,
-        sentAt: Date.now(),
-        sending: false,
-        sender: "bot",
-      };
+      if (chatgptresposta.choices[0].message.type === "audio") {
+        setAudioRecording(chatgptresposta.choices[0].message.url);
+        // Send the audio transcription as a user message after 2 seconds
+        setTimeout(() => {
+          const userMessage = {
+            id: nanoid(),
+            message: chatgptresposta.choices[0].message.transcription,
+            sentAt: Date.now(),
+            sender: "me",
+          };
+          setChats((c) => [...c, userMessage]);
+        }, 2000);
+      } else {
+        const botMessage = {
+          id: nanoid(),
+          message: chatgptresposta.choices[0].message.content,
+          sentAt: Date.now(),
+          sending: false,
+          sender: "bot",
+        };
 
-      setChats((c) => [
-        ...c.map((chat) =>
-          chat.id === id ? { ...chat, sending: false } : chat
-        ),
-        botMessage,
-      ]);
+        setChats((c) => [
+          ...c.map((chat) =>
+            chat.id === id ? { ...chat, sending: false } : chat
+          ),
+          botMessage,
+        ]);
+      }
     } catch (e) {
       const errorMessage = {
         id: nanoid(),
@@ -103,6 +117,45 @@ const Chatbot = () => {
       },
     ]);
   };
+  
+  const handleAudioTranscription = async (audioTranscription) => {
+    if (audioTranscription !== null) {
+      if (audioTranscription !== null) {
+        // Send the audio transcription as a user message
+        const userMessage = {
+          id: nanoid(),
+          message: audioTranscription,
+          sentAt: Date.now(),
+          sender: "me",
+        };
+        setChats((c) => [...c, userMessage]);
+      }
+      await fetchAndDisplayResponse(audioTranscription);
+    }
+  };
+  
+  const fetchAndDisplayResponse = async (inputMessage) => {
+    const chatgptresposta = await fetchOpenAIResponse(inputMessage, chats);
+  
+    console.log("user", inputMessage);
+    console.log("bot", chatgptresposta.choices[0].message.content);
+
+    const id = nanoid();
+    const botMessage = {
+      id: id,
+      message: chatgptresposta.choices[0].message.content,
+      sentAt: Date.now(),
+      sending: false,
+      sender: "bot",
+    };
+
+    setChats((c) => [
+      ...c.map((chat) =>
+        chat.id === id ? { ...chat, sending: false } : chat
+      ),
+      botMessage,
+    ]);
+  };  
 
   return (
     <main className="main-page">
@@ -117,13 +170,14 @@ const Chatbot = () => {
         />
       </aside>
       <div className="main-chat-wrapper">
-        <ChatMessage chats={chats} />
+        <ChatMessage chats={chats} audioRecording={audioRecording} />
         <ChatInput
           chatInput={chatInput}
           setChatInput={setChatInput}
           uploaderRef={uploaderRef}
           handleSubmit={handleSubmit}
         />
+        <RecordAudio onAudioTranscription={handleAudioTranscription} />
       </div>
       <input ref={uploaderRef} type="file" />
     </main>

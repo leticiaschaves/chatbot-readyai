@@ -8,9 +8,9 @@ import { LoginPage } from "./pages/Login";
 function App() {
   return (
     <Provider store={store}>
-      {/* <Chatbot /> */}
+      <Chatbot />
       {/* <SignUpPage /> */}
-      <LoginPage />
+      {/* <LoginPage /> */}
     </Provider>
   );
 }
