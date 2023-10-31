@@ -176,8 +176,8 @@ const Chatbot = () => {
           setChatInput={setChatInput}
           uploaderRef={uploaderRef}
           handleSubmit={handleSubmit}
+          handleAudioTranscription={handleAudioTranscription}
         />
-        <RecordAudio onAudioTranscription={handleAudioTranscription} />
       </div>
       <input ref={uploaderRef} type="file" />
     </main>

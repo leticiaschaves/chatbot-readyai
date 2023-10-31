@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { HiStop } from "react-icons/hi";
 
 function RecordAudio({ onAudioTranscription }) {
   const [recording, setRecording] = useState(false);
@@ -58,12 +59,12 @@ function RecordAudio({ onAudioTranscription }) {
   };
 
   return (
-    <div className="container">
+    <div className="record">
       <button
         className={`btn record ${recording ? 'recording' : ''}`}
         onClick={handleRecordClick}
       >
-        {recording ? 'Parando...' : 'Iniciar gravação'}
+        {recording ? 'Parar' : <HiStop />}
       </button>
     </div>
   );
