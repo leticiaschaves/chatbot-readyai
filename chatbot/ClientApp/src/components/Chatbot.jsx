@@ -14,7 +14,7 @@ const Chatbot = () => {
   const [chatInput, setChatInput] = useState("");
   const [chatsHistory, setChatsHistory] = useState([
     {
-      chatTitle: "Como usar o chatgpcubo",
+      chatTitle: "Como usar o chatbot",
       createdAt: Date.now(),
       id: nanoid(),
       loading: false,
