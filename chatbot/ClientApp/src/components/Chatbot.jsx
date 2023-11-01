@@ -15,7 +15,7 @@ const Chatbot = () => {
   const [audioRecording, setAudioRecording] = useState(null); // Novo estado para o áudio gravado
   const [chatsHistory, setChatsHistory] = useState([
     {
-      chatTitle: "Como usar o chatgpcubo",
+      chatTitle: "Como usar o chatbot",
       createdAt: Date.now(),
       id: nanoid(),
       loading: false,

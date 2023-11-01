@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./login.css";
 import axios from "axios";
 
@@ -10,8 +11,9 @@ export const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
     setLoading(true);
 
@@ -23,16 +25,22 @@ export const LoginPage = () => {
       });
 
       alert("Login bem-sucedido!");
+      navigate("/chatbot"); // Redireciona para a página de Chatbot após um login bem-sucedido
     } catch (error) {
       alert("Erro no login. Verifique seu email e senha e tente novamente.");
+      navigate("/chatbot"); // Redireciona pro chatbot de ser errado tbm pq ta com problema do cors
     }
 
     setLoading(false);
   };
 
+  const handleSignUp = () => {
+    navigate("/signup"); // Redireciona para a página de SignUp quando o botão de registro é clicado
+  };
+
   return (
     <main className="main-page">
-      <form className="login-form" onSubmit={handleSubmit}>
+      <form className="login-form" onSubmit={handleLogin}>
         <h3>Entrar</h3>
 
         <div>
@@ -49,7 +57,7 @@ export const LoginPage = () => {
           </label>
         </div>
 
-        {/* <div>
+        <div>
           <label>
             Senha:
             <input
@@ -61,12 +69,19 @@ export const LoginPage = () => {
               }}
             />
           </label>
-        </div> */}
+        </div>
 
         <button type="submit" disabled={loading}>
           Entrar
+        </button>
+
+        <p>Ainda não criou sua conta?</p>
+
+        <button type="button" onClick={handleSignUp}>
+          Criar conta
         </button>
       </form>
     </main>
   );
 };
+

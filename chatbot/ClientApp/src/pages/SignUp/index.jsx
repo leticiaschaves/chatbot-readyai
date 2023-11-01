@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Importe useNavigate
 import "./signup.css";
 import axios from "axios";
 
@@ -10,15 +11,10 @@ export const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); // Obtenha a função de navegação
 
-  // Criando uma função de enviar async, pois ela pode demorar
-  // a executar (por causa de uma requisição externa)
   const handleSubmit = async (event) => {
-    // Previnir que a página recarregue
     event.preventDefault();
-
-    // Fazendo a requisição e pondo "await" pois é ela
-    // que vai demorar
     setLoading(true);
 
     try {
@@ -28,11 +24,16 @@ export const SignUpPage = () => {
       });
 
       alert("Parabéns, você criou sua conta");
+      navigate("/chatbot");
     } catch (e) {
       //
     }
 
     setLoading(false);
+  };
+
+  const handleLogIn = () => {
+    navigate("/"); // Redirecione para a página inicial (Login) quando o botão de login é clicado
   };
 
   return (
@@ -71,7 +72,14 @@ export const SignUpPage = () => {
         <button type="submit" disabled={loading}>
           Criar conta
         </button>
+
+        <p>Já tem uma conta?</p>
+
+        <button type="button" onClick={handleLogIn}>
+          Entrar
+        </button>
       </form>
     </main>
   );
 };
+
