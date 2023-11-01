@@ -15,11 +15,6 @@ const requestFailure = (error) => ({
     payload: error,
 });
 
-export const addMessage = (text, type) => ({
-    type: type === "user" ? SEND_MESSAGE : RECEIVE_MESSAGE,
-    payload: text,
-});
-
 export const fetchOpenAIResponse = async (prompt, chats) => {
     const apiKey = import.meta.env.VITE_OPENAIAPIKEY;
     const apiUrl = 'https://api.openai.com/v1/chat/completions';
@@ -42,6 +37,4 @@ export const fetchOpenAIResponse = async (prompt, chats) => {
     });
     if (response.status !== 200) throw new Error("deu erro")
     return response.json()
-
-
 };

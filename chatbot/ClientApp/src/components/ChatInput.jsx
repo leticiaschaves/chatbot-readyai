@@ -1,10 +1,8 @@
 import React from "react";
-import {
-  HiOutlinePaperAirplane,
-  HiOutlinePaperClip,
-} from "react-icons/hi";
+import { HiOutlinePaperAirplane, HiOutlinePaperClip } from "react-icons/hi";
+import RecordAudio from "./RecordAudio"; // Import the RecordAudio component
 
-const ChatInput = ({ chatInput, setChatInput, uploaderRef, handleSubmit }) => {
+const ChatInput = ({ chatInput, setChatInput, uploaderRef, handleSubmit, handleAudioTranscription }) => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="input-wrapper">
@@ -31,6 +29,7 @@ const ChatInput = ({ chatInput, setChatInput, uploaderRef, handleSubmit }) => {
         >
           <HiOutlinePaperAirplane />
         </button>
+        <RecordAudio onAudioTranscription={handleAudioTranscription} /> {/* Include the RecordAudio component */}
       </div>
     </form>
   );
