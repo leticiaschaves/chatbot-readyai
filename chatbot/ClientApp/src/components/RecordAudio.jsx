@@ -1,71 +1,91 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { HiStop } from "react-icons/hi";
 
 function RecordAudio({ onAudioTranscription }) {
-  const [recording, setRecording] = useState(false);
-  const [audioTranscription, setAudioTranscription] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
+  const audioChunksRef = useRef([]);
+  const recorderRef = useRef(null);
+  const recognitionRef = useRef(null);
+  const recognitionTranscriptRef = useRef('');
+  const silenceTimeoutRef = useRef(null);
 
-  let recognition;
+  const startRecording = () => {
+    // Iniciar a gravação de áudio aqui
+    const streamConstraints = { audio: true };
 
-  const startRecording = async () => {
-    try {
-      // Initialize the speech recognition
-      recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-      recognition.interimResults = true;
+    navigator.mediaDevices.getUserMedia(streamConstraints)
+      .then((stream) => {
+        const mediaRecorder = new MediaRecorder(stream);
 
-      // Event handler for capturing speech recognition results
-      recognition.onresult = (event) => {
-        const finalTranscript = event.results[0][0].transcript;
-        setAudioTranscription(finalTranscript);
-      };
+        mediaRecorder.ondataavailable = (e) => {
+          audioChunksRef.current.push(e.data);
+        };
 
-      // Event handler for when speech ends
-      recognition.onspeechend = () => {
-        stopRecording();
-      };
+        mediaRecorder.onstop = () => {
+          const blob = new Blob(audioChunksRef.current, { type: 'audio/mp3' });
+          document.getElementById('audioElement').src = URL.createObjectURL(blob);
+        };
 
-      // Event handler for recognition errors
-      recognition.onerror = (event) => {
-        stopRecording();
-        handleRecognitionError(event.error);
-      };
+        mediaRecorder.start();
+        setIsRecording(true);
+        recorderRef.current = mediaRecorder;
+      })
+      .catch((error) => {
+        console.error(error);
+        alert('Falha ao acessar o microfone.');
+      });
 
-      recognition.start();
+    // Iniciar a transcrição em tempo real separadamente
+    const recognitionInstance = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognitionInstance.interimResults = true;
 
-      setRecording(true);
-    } catch (error) {
-      console.error(error); // Log errors for debugging
-    }
+    recognitionInstance.onresult = (event) => {
+      const finalTranscript = event.results[0][0].transcript;
+      recognitionTranscriptRef.current = finalTranscript;
+
+      // Limpa o temporizador anterior
+      if (silenceTimeoutRef.current) {
+        clearTimeout(silenceTimeoutRef.current);
+      }
+
+      // Define um novo temporizador para aguardar 1 segundo de silêncio
+      silenceTimeoutRef.current = setTimeout(() => {
+        onAudioTranscription(recognitionTranscriptRef.current);
+      }, 1000);
+    };
+
+    recognitionInstance.start();
+    recognitionRef.current = recognitionInstance;
   };
 
   const stopRecording = () => {
-    if (recording) {
-      setRecording(false);
-      onAudioTranscription(audioTranscription);
+    if (isRecording) {
+      recorderRef.current.stop();
+      recognitionRef.current.stop();
+      setIsRecording(false);
     }
   };
 
-  const handleRecognitionError = (error) => {
-    // Handle recognition errors here
-    console.error('Recognition error:', error);
-  };
-
-  const handleRecordClick = () => {
-    if (!recording) {
-      startRecording();
-    } else {
+  const handleToggleRecording = () => {
+    if (isRecording) {
       stopRecording();
+    } else {
+      document.getElementById('isRecording').textContent = 'Gravando...';
+      startRecording();
     }
   };
 
   return (
     <div className="record">
       <button
-        className={`btn record ${recording ? 'recording' : ''}`}
-        onClick={handleRecordClick}
+        id="startRecording"
+        className={`btn record ${isRecording ? 'recording' : ''}`}
+        onClick={handleToggleRecording}
       >
-        {recording ? 'Parar' : <HiStop />}
+        {isRecording ? 'Parar' : <HiStop />}
       </button>
+      <div id="isRecording">{isRecording ? 'Gravando...' : ''}</div>
+      <audio id="audioElement" controls />
     </div>
   );
 }

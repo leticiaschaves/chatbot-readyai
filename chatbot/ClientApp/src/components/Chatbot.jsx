@@ -1,11 +1,10 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { fetchOpenAIResponse } from "../redux/actions/actions";
 import { nanoid } from "nanoid";
 import { HiOutlinePlus } from "react-icons/hi";
 import ChatInput from "./ChatInput";
 import ChatHistoryList from "./ChatHistoryList";
 import ChatMessage from "./ChatMessage";
-import RecordAudio from "./RecordAudio";
 import "./Chatbot.css";
 
 const Chatbot = () => {
@@ -117,26 +116,24 @@ const Chatbot = () => {
       },
     ]);
   };
-  
+
   const handleAudioTranscription = async (audioTranscription) => {
     if (audioTranscription !== null) {
-      if (audioTranscription !== null) {
-        // Send the audio transcription as a user message
-        const userMessage = {
-          id: nanoid(),
-          message: audioTranscription,
-          sentAt: Date.now(),
-          sender: "me",
-        };
-        setChats((c) => [...c, userMessage]);
-      }
-      await fetchAndDisplayResponse(audioTranscription);
+      // Send the audio transcription as a user message
+      const userMessage = {
+        id: nanoid(),
+        message: audioTranscription,
+        sentAt: Date.now(),
+        sender: "me",
+      };
+      setChats((c) => [...c, userMessage]);
     }
+    await fetchAndDisplayResponse(audioTranscription);
   };
-  
+
   const fetchAndDisplayResponse = async (inputMessage) => {
     const chatgptresposta = await fetchOpenAIResponse(inputMessage, chats);
-  
+
     console.log("user", inputMessage);
     console.log("bot", chatgptresposta.choices[0].message.content);
 
@@ -155,7 +152,7 @@ const Chatbot = () => {
       ),
       botMessage,
     ]);
-  };  
+  };
 
   return (
     <main className="main-page">
