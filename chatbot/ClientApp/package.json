@@ -15,6 +15,7 @@
     "classnames": "^2.3.2",
     "nanoid": "^5.0.2",
     "react": "^18.2.0",
+    "react-audio-waveform": "^0.0.5",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
     "react-redux": "^8.1.3",
