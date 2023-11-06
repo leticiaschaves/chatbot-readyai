@@ -247,6 +247,25 @@ body {
   opacity: 0.75;
 }
 
+.form-button.recording {
+  background-color: #e74c3c; /* Vermelho */
+  color: #fff;
+  padding: 5px 18px;
+  animation: blinking 1s infinite;
+}
+
+@keyframes blinking {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 @keyframes spin {
   100% {
     transform: rotate(360deg);
