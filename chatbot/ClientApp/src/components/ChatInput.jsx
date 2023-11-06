@@ -1,18 +1,27 @@
 import React from "react";
 import { HiOutlinePaperAirplane, HiOutlinePaperClip } from "react-icons/hi";
-import RecordAudio from "./RecordAudio"; // Import the RecordAudio component
+import { RecordAudioMemo } from "./RecordAudio"; // Import the RecordAudio component
 
-const ChatInput = ({ chatInput, setChatInput, uploaderRef, handleSubmit, handleAudioTranscription }) => {
+const ChatInput = ({
+  chatInput,
+  setChatInput,
+  uploaderRef,
+  handleSubmit,
+  handleAudioTranscription,
+}) => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="input-wrapper">
         <input
+          id="main-input"
           label="message"
           placeholder="Send a message"
           onChange={(e) => setChatInput(e.target.value)}
           value={chatInput}
         />
-        {uploaderRef.current?.value && <span>{uploaderRef.current?.value}</span>}
+        {uploaderRef.current?.value && (
+          <span>{uploaderRef.current?.value}</span>
+        )}
         <button
           className="form-button"
           type="button"
@@ -22,14 +31,15 @@ const ChatInput = ({ chatInput, setChatInput, uploaderRef, handleSubmit, handleA
         >
           <HiOutlinePaperClip />
         </button>
-        <button
-          className="form-button"
-          type="submit"
-          onClick={handleSubmit}
-        >
+
+        <RecordAudioMemo
+          onAudioTranscription={handleAudioTranscription}
+          setChatInput={setChatInput}
+        />
+
+        <button className="form-button" type="submit" onClick={handleSubmit}>
           <HiOutlinePaperAirplane />
         </button>
-        <RecordAudio onAudioTranscription={handleAudioTranscription} /> {/* Include the RecordAudio component */}
       </div>
     </form>
   );
