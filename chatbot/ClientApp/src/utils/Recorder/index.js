@@ -1,31 +1,5 @@
-interface Props {
-  /**
-   * Speech Recognition language
-   * 
-   * defaults to "pt-BR". You can use en-US, fr-FR, es-ES, etc...
-   */
-  language?: string;
-
-  /**
-   * setState for the chat input
-   */
-  setChatInput: React.Dispatch<React.SetStateAction<string>>;
-}
-
-export class Recorder {
-  language: string;
-  audio_blob: Blob;
-  transcription: string;
-  media_recorder: MediaRecorder;
-  status: "recording" | "stopped";
-
-  private audio_chunks: Blob[];
-  private recognition: SpeechRecognition;
-  private audio_url: string;
-  private setInput?: React.Dispatch<React.SetStateAction<string>>;
-
-  // Constructor (class initializer)
-  constructor(props?: Props) {
+class Recorder {
+  constructor(props) {
     this.status = "stopped";
     this.language = props?.language || "pt-BR";
     this.audio_chunks = [];
@@ -35,7 +9,6 @@ export class Recorder {
     this.configureTranscription();
   }
 
-  // Configuring microphone recorder
   async configureMicrophone() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -46,15 +19,12 @@ export class Recorder {
       };
 
       this.media_recorder.onstop = () => {
-        // Stop recording on the browser
         stream.getTracks().forEach((track) => track.stop());
 
-        // Create blob from audio chunks
         const chunks = new Blob(this.audio_chunks, {
           type: this.media_recorder.mimeType,
         });
 
-        // Create blob URL
         this.audio_url = URL.createObjectURL(chunks);
       };
     } catch (error) {
@@ -62,7 +32,6 @@ export class Recorder {
     }
   }
 
-  // Configuring speech recognition
   configureTranscription() {
     const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -71,21 +40,17 @@ export class Recorder {
     this.recognition.interimResults = true;
     this.recognition.continuous = true;
     this.recognition.onerror = console.error;
-    this.recognition.onend = this.stop;
+    this.recognition.onend = this.stop.bind(this);
 
     this.recognition.onresult = ({ results }) => {
-      // Gets all transcriptions from all results from all recognitions and puts it into `this.transcription`
       this.transcription = [...results]
         .flatMap((result) => [...result].map(({ transcript }) => transcript))
-        // joining all array items with nothing to create a string
         .join("");
 
-      // Updating input to what we speak
       if (this.setInput) this.setInput(this.transcription);
     };
   }
 
-  // Stopping recording and returning audio URL and transcription.
   async stop() {
     if (this.setInput) this.setInput("");
     if (this.recognition) this.recognition.stop();
@@ -93,7 +58,6 @@ export class Recorder {
 
     this.status = "stopped";
 
-    // Waits 1ms (we need to wait for `this.media_recorder.onstop`)
     await new Promise((r) => setTimeout(r, 1));
 
     return {
@@ -102,7 +66,6 @@ export class Recorder {
     };
   }
 
-  // Starting recording microphone and speech recognition
   async start() {
     if (this.setInput) this.setInput("");
 
@@ -122,3 +85,5 @@ export class Recorder {
     this.transcription = "";
   }
 }
+
+export default Recorder;

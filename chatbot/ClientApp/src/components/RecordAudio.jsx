@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { HiOutlineMicrophone, HiOutlineStop } from "react-icons/hi";
-import { Recorder } from "../utils/Recorder";
+import Recorder from "../utils/Recorder";
 
 function RecordAudio({ onAudioTranscription, setChatInput }) {
   // Creating a state to keep in track with the recording state
