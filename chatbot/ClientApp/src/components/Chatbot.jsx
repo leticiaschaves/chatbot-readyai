@@ -37,13 +37,13 @@ const Chatbot = () => {
       id,
       sending: true,
       sender: "me",
+      type: "text",
     };
 
     setChats((c) => [...c, newMeMessage]);
 
     try {
       const chatgptresposta = await fetchOpenAIResponse(chatInput, chats);
-      console.log("user", chatInput);
 
       if (chatgptresposta.choices[0].message.type === "audio") {
         setAudioRecording(chatgptresposta.choices[0].message.url);
@@ -54,6 +54,7 @@ const Chatbot = () => {
             message: chatgptresposta.choices[0].message.transcription,
             sentAt: Date.now(),
             sender: "me",
+            type: "text",
           };
           setChats((c) => [...c, userMessage]);
         }, 2000);
@@ -64,6 +65,7 @@ const Chatbot = () => {
           sentAt: Date.now(),
           sending: false,
           sender: "bot",
+          type: "text",
         };
 
         setChats((c) => [
@@ -117,25 +119,31 @@ const Chatbot = () => {
     ]);
   };
 
-  const handleAudioTranscription = async (audioTranscription) => {
-    if (audioTranscription !== null) {
-      // Send the audio transcription as a user message
-      const userMessage = {
-        id: nanoid(),
-        message: audioTranscription,
-        sentAt: Date.now(),
-        sender: "me",
-      };
-      setChats((c) => [...c, userMessage]);
-    }
+  const handleAudioTranscription = async (audioTranscription, objectUrl) => {
+    // Send the audio transcription as a user message
+    const userMessage = {
+      id: nanoid(),
+      message: audioTranscription,
+      sentAt: Date.now(),
+      sender: "me",
+      type: "audio",
+      sending: true,
+      objectUrl,
+    };
+
+    setChats((c) => [...c, userMessage]);
+
     await fetchAndDisplayResponse(audioTranscription);
+
+    setChats((c) =>
+      c.map((chat) =>
+        chat.id === userMessage.id ? { ...chat, sending: false } : chat
+      )
+    );
   };
 
   const fetchAndDisplayResponse = async (inputMessage) => {
     const chatgptresposta = await fetchOpenAIResponse(inputMessage, chats);
-
-    console.log("user", inputMessage);
-    console.log("bot", chatgptresposta.choices[0].message.content);
 
     const id = nanoid();
     const botMessage = {
@@ -148,7 +156,7 @@ const Chatbot = () => {
 
     setChats((c) => [
       ...c.map((chat) =>
-        chat.id === id ? { ...chat, sending: false } : chat
+        chat.id === id ? { ...chat, sending: false, type: "text" } : chat
       ),
       botMessage,
     ]);
@@ -168,6 +176,7 @@ const Chatbot = () => {
       </aside>
       <div className="main-chat-wrapper">
         <ChatMessage chats={chats} audioRecording={audioRecording} />
+
         <ChatInput
           chatInput={chatInput}
           setChatInput={setChatInput}

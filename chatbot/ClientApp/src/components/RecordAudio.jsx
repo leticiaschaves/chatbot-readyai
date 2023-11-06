@@ -1,93 +1,50 @@
-import React, { useState, useRef } from 'react';
-import { HiStop } from "react-icons/hi";
+import React, { useState, useMemo } from "react";
+import { HiOutlineMicrophone, HiOutlineStop } from "react-icons/hi";
+import { Recorder } from "../utils/Recorder";
 
-function RecordAudio({ onAudioTranscription }) {
-  const [isRecording, setIsRecording] = useState(false);
-  const audioChunksRef = useRef([]);
-  const recorderRef = useRef(null);
-  const recognitionRef = useRef(null);
-  const recognitionTranscriptRef = useRef('');
-  const silenceTimeoutRef = useRef(null);
+function RecordAudio({ onAudioTranscription, setChatInput }) {
+  // Creating a state to keep in track with the recording state
+  const [recording, setRecording] = useState(false);
 
-  const startRecording = () => {
-    // Iniciar a gravação de áudio aqui
-    const streamConstraints = { audio: true };
+  // Creating a memoized Recorder passing the `setChatInput` variable to
+  // update it and empty it when necessary
+  const recorder = useMemo(() => {
+    return new Recorder({
+      setChatInput: setChatInput,
+    });
+  }, [setChatInput]);
 
-    navigator.mediaDevices.getUserMedia(streamConstraints)
-      .then((stream) => {
-        const mediaRecorder = new MediaRecorder(stream);
-
-        mediaRecorder.ondataavailable = (e) => {
-          audioChunksRef.current.push(e.data);
-        };
-
-        mediaRecorder.onstop = () => {
-          const blob = new Blob(audioChunksRef.current, { type: 'audio/mp3' });
-          document.getElementById('audioElement').src = URL.createObjectURL(blob);
-        };
-
-        mediaRecorder.start();
-        setIsRecording(true);
-        recorderRef.current = mediaRecorder;
-      })
-      .catch((error) => {
-        console.error(error);
-        alert('Falha ao acessar o microfone.');
-      });
-
-    // Iniciar a transcrição em tempo real separadamente
-    const recognitionInstance = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognitionInstance.interimResults = true;
-
-    recognitionInstance.onresult = (event) => {
-      const finalTranscript = event.results[0][0].transcript;
-      recognitionTranscriptRef.current = finalTranscript;
-
-      // Limpa o temporizador anterior
-      if (silenceTimeoutRef.current) {
-        clearTimeout(silenceTimeoutRef.current);
-      }
-
-      // Define um novo temporizador para aguardar 1 segundo de silêncio
-      silenceTimeoutRef.current = setTimeout(() => {
-        onAudioTranscription(recognitionTranscriptRef.current);
-      }, 1000);
-    };
-
-    recognitionInstance.start();
-    recognitionRef.current = recognitionInstance;
-  };
-
-  const stopRecording = () => {
-    if (isRecording) {
-      recorderRef.current.stop();
-      recognitionRef.current.stop();
-      setIsRecording(false);
-    }
-  };
-
-  const handleToggleRecording = () => {
-    if (isRecording) {
-      stopRecording();
+  // Toggling recording state
+  const handleToggleRecording = async () => {
+    if (recorder.status === "stopped") {
+      recorder.start();
+      setRecording(true);
     } else {
-      document.getElementById('isRecording').textContent = 'Gravando...';
-      startRecording();
+      const result = await recorder.stop();
+      setRecording(false);
+      if (!result.transcription) return;
+      onAudioTranscription(result.transcription, result.audio);
     }
+
+    // Delays 100ms
+    await new Promise((r) => setTimeout(r, 100));
+
+    // Only then, empties input state
+    setChatInput("");
   };
 
   return (
     <div className="record">
       <button
         id="startRecording"
-        className={`btn record ${isRecording ? 'recording' : ''}`}
+        type="button"
+        className={`form-button`}
         onClick={handleToggleRecording}
       >
-        {isRecording ? 'Parar' : <HiStop />}
+        {recording ? <HiOutlineStop /> : <HiOutlineMicrophone />}
       </button>
-      <div id="isRecording">{isRecording ? 'Gravando...' : ''}</div>
-      <audio id="audioElement" controls />
     </div>
   );
 }
 
-export default RecordAudio;
+export const RecordAudioMemo = React.memo(RecordAudio);

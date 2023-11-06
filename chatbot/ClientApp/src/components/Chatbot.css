@@ -21,7 +21,7 @@ body {
   width: 100%;
 }
 
-.main-page>input[type="file"] {
+.main-page > input[type="file"] {
   display: none;
 }
 
@@ -33,7 +33,7 @@ body {
   padding: 16px;
 }
 
-.sidebar>button {
+.sidebar > button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -110,7 +110,7 @@ body {
   list-style: none;
   overflow-y: auto;
   overflow-x: hidden;
-  padding-inline: 20px
+  padding-inline: 20px;
 }
 
 .main-chat-wrapper ul li {
@@ -124,7 +124,7 @@ body {
   gap: 8px;
   width: 100%;
 
-  padding-inline: 20px
+  padding-inline: 20px;
 }
 
 .main-chat-wrapper form .input-wrapper {
@@ -151,7 +151,7 @@ body {
   outline: none;
 }
 
-.main-chat-wrapper form .input-wrapper .form-button:last-of-type svg {
+.main-chat-wrapper form .input-wrapper .form-button:nth-of-type(2) svg {
   transform: rotate(90deg);
 }
 
@@ -181,6 +181,7 @@ body {
 
 .message.me span {
   overflow: overlay;
+  text-align: end;
 }
 
 .message.bot {
@@ -195,7 +196,7 @@ body {
   text-align: start;
 }
 
-.message.bot>svg {
+.message.bot > svg {
   fill: #ffffff80;
   margin-top: 2px;
   margin-right: 8px;
@@ -235,6 +236,15 @@ body {
 
 .message .state svg {
   font-size: 10px;
+}
+
+.message.audio {
+  flex-flow: column-reverse;
+  gap: 4px;
+}
+
+.transcription-label {
+  opacity: 0.75;
 }
 
 @keyframes spin {
