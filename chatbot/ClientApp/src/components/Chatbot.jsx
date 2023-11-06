@@ -176,7 +176,6 @@ const Chatbot = () => {
       </aside>
       <div className="main-chat-wrapper">
         <ChatMessage chats={chats} audioRecording={audioRecording} />
-
         <ChatInput
           chatInput={chatInput}
           setChatInput={setChatInput}

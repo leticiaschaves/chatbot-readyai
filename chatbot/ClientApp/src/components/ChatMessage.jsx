@@ -2,6 +2,7 @@ import React from "react";
 import { HiCheck } from "react-icons/hi";
 import { FaRobot } from "react-icons/fa6";
 import { ImSpinner8 } from "react-icons/im";
+import Waveform from "../utils/Waveform";
 
 const ChatMessage = ({ chats }) => {
   return (
@@ -9,21 +10,21 @@ const ChatMessage = ({ chats }) => {
       {chats.map(({ id, message, sending, sender, type, objectUrl }) =>
         sender === "me" ? (
           <li
-            key={id}
-            className={`message me${type === "audio" ? " audio" : ""}`}
-          >
-            <span>{message}</span>
+          key={id}
+          className={`message me${type === "audio" ? " audio" : ""}`}
+        >
+          <span>{message}</span>
 
-            <div className={`state${sending ? " sending" : ""}`}>
-              {sending ? <ImSpinner8 /> : <HiCheck />}
-            </div>
+          <div className={`state${sending ? " sending" : ""}`}>
+            {sending ? <ImSpinner8 /> : <HiCheck />}
+          </div>
 
-            {type === "audio" && (
-              <span className="transcription-label">Transcrição:</span>
-            )}
+          {type === "audio" && (
+            <span className="transcription-label">Transcrição:</span>
+          )}
 
-            {type === "audio" && <audio controls src={objectUrl} />}
-          </li>
+          {type === "audio" && <Waveform audio={objectUrl} />}
+        </li>
         ) : (
           <li key={id} className="message bot">
             <div className="robot-icon">
