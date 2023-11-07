@@ -17,10 +17,10 @@ const Waveform = ({ audio }) => {
       container: containerRef.current,
       backend: 'WebAudio',
       barWidth: 2,
-      cursorColor: 'white',
-      height: 40,
+      cursorColor: 'black',
+      height: 20,
       barRadius: 1,
-      waveColor: 'white',
+      waveColor: '#2d2d2d',
       progressColor: 'grey',
       dragToSeek: true,
     })

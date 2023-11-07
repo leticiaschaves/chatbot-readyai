@@ -1,16 +1,16 @@
 .waveform-container {
-    width: 100%;
-    background-color: #2d2d2d;
+    width: 200px;
+    padding-right: 1rem;
+    background-color: white;
     margin-bottom: 10px;
     display: flex;
     border-radius: 10px;
     align-items: center;
-    height: 40;
   }
   
   .play-button {
     background-color: transparent;
-    color: white;
+    color: #2d2d2d;
     border: none;
     width: 55px;
     height: 50px;
