@@ -15,6 +15,14 @@ const Waveform = ({ audio }) => {
   useEffect(() => {
     const waveSurfer = WaveSurfer.create({
       container: containerRef.current,
+      backend: 'WebAudio',
+      barWidth: 2,
+      cursorColor: 'white',
+      height: 40,
+      barRadius: 1,
+      waveColor: 'white',
+      progressColor: 'grey',
+      dragToSeek: true,
     })
     waveSurfer.load(audio)
     waveSurfer.on('ready', () => {
@@ -36,13 +44,9 @@ const Waveform = ({ audio }) => {
         type="button"
         className="play-button"
       >
-        {isPlaying ? (
-          <FaPauseCircle className="pause-icon" />
-        ) : (
-          <FaPlayCircle className="play-icon" /> 
-        )}
+        { isPlaying ? <FaPauseCircle className="pause-icon"/> : <FaPlayCircle className="play-icon" /> }
       </button>
-      <div ref={containerRef} />
+      <div ref={containerRef} style={{width: '100%'}}/>
     </div>
   )
 }

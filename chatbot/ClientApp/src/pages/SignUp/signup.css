@@ -6,10 +6,8 @@ form.sign-up-form {
   display: flex;
   flex-flow: column;
   gap: 8px;
-
   margin: auto;
   padding-bottom: 20vh;
-
   color: white;
 }
 
@@ -19,7 +17,6 @@ form.sign-up-form h3 {
 
 form.sign-up-form button {
   color: #222;
-
   margin-top: 8px;
 }
 
@@ -28,17 +25,13 @@ form.sign-up-form label {
   flex-flow: column;
   justify-content: flex-start;
   gap: 4px;
-
   font-size: 1.25rem;
-
   text-align: start;
 }
 
 form.sign-up-form input {
   padding: 8px 16px;
-
   font-size: 1.25rem;
-
   border-radius: 4px;
   border: 1px solid #5d5d5d;
 }
