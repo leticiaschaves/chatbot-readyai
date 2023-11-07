@@ -1,31 +1,31 @@
 .waveform-container {
     width: 100%;
-    height: 100px; /* Adjust the height as needed */
-    background-color: transparent;
-    margin-bottom: 10px; /* Add spacing between waveform and controls */
+    background-color: #2d2d2d;
+    margin-bottom: 10px;
+    display: flex;
+    border-radius: 10px;
+    align-items: center;
+    height: 40;
   }
   
-  /* Style for the play/pause button */
   .play-button {
-    background-color: #2D5BFF;
+    background-color: transparent;
     color: white;
     border: none;
-    border-radius: 50%;
-    width: 50px;
+    width: 55px;
     height: 50px;
     display: flex;
-    align-items: center;
-    justify-content: center;
     cursor: pointer;
     transition: background-color 0.3s;
-    margin-right: 10px; /* Add spacing between button and waveform */
+  }
+
+  .waveform-container ::part(cursor) {
+    top: calc(50% - 6px);
+    height: 12px;
+    width: 12px !important;
+    border-radius: 6px;
   }
   
-  .play-button:hover {
-    background-color: #1A3A9E; /* Change color on hover */
-  }
-  
-  /* Style for the play/pause icons (FontAwesome) */
   .play-icon,
   .pause-icon {
     font-size: 2em;

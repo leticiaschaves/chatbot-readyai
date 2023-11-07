@@ -16,13 +16,13 @@ const Waveform = ({ audio }) => {
     const waveSurfer = WaveSurfer.create({
       container: containerRef.current,
       backend: 'WebAudio',
-      barWidth: 1, // Customize bar width to make it tiny
-      cursorWidth: 1, // Customize cursor width to make it tiny
-      cursorColor: 'red', // Customize cursor color
-      height: 40, // Customize waveform height to make it tiny
-      barRadius: 1, // Add rounded edges to bars for a cute look
-      waveColor: 'lightblue', // Customize waveform color
-      progressColor: 'blue', // Customize progress color
+      barWidth: 2,
+      cursorColor: 'white',
+      height: 40,
+      barRadius: 1,
+      waveColor: 'white',
+      progressColor: 'grey',
+      dragToSeek: true,
     })
     waveSurfer.load(audio)
     waveSurfer.on('ready', () => {
@@ -46,7 +46,7 @@ const Waveform = ({ audio }) => {
       >
         { isPlaying ? <FaPauseCircle className="pause-icon"/> : <FaPlayCircle className="play-icon" /> }
       </button>
-      <div ref={containerRef} />
+      <div ref={containerRef} style={{width: '100%'}}/>
     </div>
   )
 }
