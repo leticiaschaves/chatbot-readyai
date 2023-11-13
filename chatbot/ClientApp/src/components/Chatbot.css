@@ -247,6 +247,27 @@ body {
   opacity: 0.75;
 }
 
+/* Estilo do botão de gravação de audio*/
+.form-button.recording {
+  background-color: #e74c3c; 
+  color: #fff;
+  padding: 5px 18px;
+  animation: blinking 1s infinite;
+}
+
+/*Animação do botão de gravação de audio*/
+@keyframes blinking {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 @keyframes spin {
   100% {
     transform: rotate(360deg);

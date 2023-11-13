@@ -1,4 +1,38 @@
 .waveform-container {
+  width: 100%;
+  background-color: #1e1e1e;
+  margin-bottom: 10px;
+  display: flex;
+  border-radius: 10px;
+  align-items: center;
+  height: 60px; /* Aumentei a altura para um visual melhor */
+}
+
+.play-button {
+  background-color: #1e1e1e;
+  color: white;
+  border: none;
+  width: 55px;
+  height: 60px; /* Igual à altura do contêiner */
+  display: flex;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  align-items: center; /* Centralize o ícone verticalmente */
+  justify-content: center; /* Centralize o ícone horizontalmente */
+}
+
+.waveform-container::part(cursor) {
+  top: calc(50% - 6px);
+  height: 12px;
+  width: 12px !important;
+  border-radius: 6px;
+}
+
+/* .play-icon,
+.pause-icon {
+  font-size: 2em;
+}
+
     width: 200px;
     padding-right: 1rem;
     background-color: white;
@@ -6,7 +40,7 @@
     display: flex;
     border-radius: 10px;
     align-items: center;
-  }
+  } */
   
   .play-button {
     background-color: transparent;
@@ -19,15 +53,3 @@
     transition: background-color 0.3s;
   }
 
-  .waveform-container ::part(cursor) {
-    top: calc(50% - 6px);
-    height: 12px;
-    width: 12px !important;
-    border-radius: 6px;
-  }
-  
-  .play-icon,
-  .pause-icon {
-    font-size: 2em;
-  }
-  

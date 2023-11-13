@@ -28,6 +28,11 @@ const Waveform = ({ audio }) => {
     waveSurfer.on('ready', () => {
       waveSurferRef.current = waveSurfer
     })
+  
+    //Volta a bolinha pro inicio quando acaba o audio
+    waveSurfer.on('finish', () => {
+      waveSurferRef.current.seekTo(0)
+    })
 
     return () => {
       waveSurfer.destroy()
