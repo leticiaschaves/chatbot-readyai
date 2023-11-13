@@ -4,6 +4,7 @@ import {
   HiOutlineChatAlt,
   HiOutlineTrash,
 } from "react-icons/hi";
+import { getAllChats } from "./api.js";
 
 const ChatHistoryList = ({ chatsHistory, handleRemoveChatHistory }) => {
   return (
