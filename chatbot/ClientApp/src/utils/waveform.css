@@ -28,9 +28,28 @@
   border-radius: 6px;
 }
 
-.play-icon,
+/* .play-icon,
 .pause-icon {
   font-size: 2em;
 }
 
+    width: 200px;
+    padding-right: 1rem;
+    background-color: white;
+    margin-bottom: 10px;
+    display: flex;
+    border-radius: 10px;
+    align-items: center;
+  } */
+  
+  .play-button {
+    background-color: transparent;
+    color: #2d2d2d;
+    border: none;
+    width: 55px;
+    height: 50px;
+    display: flex;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
 
