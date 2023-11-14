@@ -13,6 +13,7 @@ const Chatbot = () => {
   const [chats, setChats] = useState([]);
   const [chatInput, setChatInput] = useState("");
   const [audioRecording, setAudioRecording] = useState(null);
+  const [chatTitle, setChatTitle] = useState('Novo Chat');
   const [chatsHistory, setChatsHistory] = useState(() => {
     const storedChatsHistory = localStorage.getItem("chatsHistory");
     return storedChatsHistory
@@ -34,7 +35,7 @@ const Chatbot = () => {
 
   const handleCreateChatHistory = () => {
     const newChat = {
-      chatTitle: "New chat",
+      chatTitle: chatTitle,
       createdAt: Date.now(),
       id: nanoid(),
       messages: [],
@@ -236,11 +237,14 @@ const handleRemoveChatHistory = (id) => {
     <main className="main-page">
       <aside className="sidebar">
         <button type="button" className="new-chat" onClick={handleCreateChatHistory}>
-          <HiOutlinePlus />
+          <HiOutlinePlus style={{ fontSize: '15px' }} />
           Novo Chat
         </button>
-        <button type="button" className="delete" onClick={handleDeleteAllMessages}>
-          <HiOutlineTrash />
+        <button 
+        type="button" 
+        className="delete" 
+        onClick={handleDeleteAllMessages}>
+          <HiOutlineTrash style={{ fontSize: '15px' }}/>
           Apagar tudo
         </button>
         <ChatHistoryList

@@ -28,18 +28,15 @@ body {
 .sidebar {
   display: flex;
   flex-flow: column;
-  width: 300px;
+  width: 15rem;
   background-color: #181818;
   gap: 1rem;
   padding: 16px;
 }
 
 .new-chat {
-  border:  none;
   background-color: #526f43;
-  padding: 0.5rem;
   color: white;
-  
 }
 
 .delete {
@@ -52,18 +49,26 @@ body {
 .sidebar > button {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: baseline;
+  padding: 0.5rem;
   gap: 16px;
   border-radius: 4px;
   font-size: 0.75rem;
 }
 
-.sidebar ul {
+.chats-list-sidebar {
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
+  justify-content: baseline;
+  align-items: stretch;
   list-style: none;
-  margin-top: 16px;
   background-color: inherit;
+}
+
+.remove-chat {
+  background-color: transparent;
+  color: white;
+  font-size: 15px;
 }
 
 .sidebar ul li {
@@ -73,7 +78,8 @@ body {
 .sidebar ul li a {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: baseline;
+  gap: 0.5rem;
   font-size: 0.75rem;
   padding: 8px 16px;
   border-radius: 4px;
