@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { HiOutlineMicrophone, HiOutlineStop } from "react-icons/hi";
 import Recorder from "../utils/Recorder";
-import classnames from "classnames";
+// import classnames from "classnames";
 import "./Chatbot.css";
 
 function RecordAudio({ onAudioTranscription, setChatInput }) {
@@ -40,10 +40,11 @@ function RecordAudio({ onAudioTranscription, setChatInput }) {
       <button
         id="startRecording"
         type="button"
-        className={classnames("form-button", { recording: recording })}
+        
+        // className={classnames("form-button", { recording: recording })}
         onClick={handleToggleRecording}
       >
-        {recording ? <HiOutlineStop /> : <HiOutlineMicrophone />}
+        {recording ? <HiOutlineStop/> : <HiOutlineMicrophone />}
       </button>
     </div>
   );

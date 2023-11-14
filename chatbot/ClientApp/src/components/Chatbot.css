@@ -30,7 +30,23 @@ body {
   flex-flow: column;
   width: 300px;
   background-color: #181818;
+  gap: 1rem;
   padding: 16px;
+}
+
+.new-chat {
+  border:  none;
+  background-color: #526f43;
+  padding: 0.5rem;
+  color: white;
+  
+}
+
+.delete {
+  background-color: transparent;
+  border: 1px solid #9eb293;
+  padding: 0.5rem;
+  color: #9eb293;
 }
 
 .sidebar > button {
@@ -38,10 +54,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 16px;
-  border: 1px solid #ededed;
   border-radius: 4px;
-  background-color: transparent;
-  color: white;
   font-size: 0.75rem;
 }
 
@@ -132,8 +145,7 @@ body {
   align-items: center;
   flex: 1;
   border-radius: 4px;
-  border: 1px solid #969696;
-
+  border: 1px solid #9eb293;
   background-color: #333;
 }
 
@@ -144,6 +156,7 @@ body {
   padding: 8px 16px;
   height: 100%;
   background-color: #333;
+  color: white;
 }
 
 .main-chat-wrapper form .input-wrapper input:focus-visible {
@@ -158,6 +171,7 @@ body {
 .form-button {
   background-color: transparent;
   padding: 12px;
+  filter: invert(1);
 }
 
 .message {

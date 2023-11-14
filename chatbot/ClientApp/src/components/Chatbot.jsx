@@ -235,11 +235,11 @@ const handleRemoveChatHistory = (id) => {
   return (
     <main className="main-page">
       <aside className="sidebar">
-        <button type="button" onClick={handleCreateChatHistory}>
+        <button type="button" className="new-chat" onClick={handleCreateChatHistory}>
           <HiOutlinePlus />
           Novo Chat
         </button>
-        <button type="button" onClick={handleDeleteAllMessages}>
+        <button type="button" className="delete" onClick={handleDeleteAllMessages}>
           <HiOutlineTrash />
           Apagar tudo
         </button>
