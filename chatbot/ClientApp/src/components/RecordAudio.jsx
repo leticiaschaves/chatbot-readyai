@@ -40,10 +40,11 @@ function RecordAudio({ onAudioTranscription, setChatInput }) {
       <button
         id="startRecording"
         type="button"
+        
         className={classnames("form-button", { recording: recording })}
         onClick={handleToggleRecording}
       >
-        {recording ? <HiOutlineStop /> : <HiOutlineMicrophone />}
+        {recording ? <HiOutlineStop/> : <HiOutlineMicrophone />}
       </button>
     </div>
   );
