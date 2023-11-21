@@ -6,7 +6,7 @@ import ChatInput from "./ChatInput";
 import ChatHistoryList from "./ChatHistoryList";
 import ChatMessage from "./ChatMessage";
 import "./Chatbot.css";
-import { useChat } from "../utils/Chat/ChatFunctions";
+import { useChat } from  '../utils/Chat/ChatFunctions';
 
 const Chatbot = () => {
   const uploaderRef = useRef(null);
@@ -29,8 +29,8 @@ const Chatbot = () => {
 
     if (!chatInput || disabled) return;
 
+    // Chamar a função para enviar mensagem
     await sendMessage(chatInput, setChatInput);
-
     setChatInput(""); // Limpar o campo de entrada após o envio da mensagem
   };
 
