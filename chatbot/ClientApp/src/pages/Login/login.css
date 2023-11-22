@@ -16,13 +16,7 @@
   form.login-form h3 {
     font-size: 2rem;
   }
-  
-  form.login-form button {
-    color: #222;
-  
-    margin-top: 8px;
-  }
-  
+
   form.login-form label {
     display: flex;
     flex-flow: column;
@@ -35,10 +29,35 @@
   }
   
   form.login-form input {
-    padding: 8px 16px;
-  
-    font-size: 1.25rem;
-  
-    border-radius: 4px;
-    border: 1px solid #5d5d5d;
+    background: none;
+    color: #ffffff;
+    font-size: 18px;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 320px;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #4F4F4F;
   }
+  
+
+
+  form.login-form button {
+  background: #fff;
+  color: #959595;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 8px;
+  border-radius: 3px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -webkit-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+form.login-form button:hover {
+  color: #752021;
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.18), 0 5px 5px rgba(0, 0, 0, 0.12);
+}

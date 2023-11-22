@@ -19,7 +19,7 @@ export const LoginPage = () => {
 
     try {
       // Envia uma solicitação de login com email e senha
-      await api.post("/login", {
+      await api.get("/users/", {
         email,
         password,
       });

@@ -18,13 +18,13 @@ export const SignUpPage = () => {
     setLoading(true);
 
     try {
-      await api.post("/users", {
+      await api.post("/users/", {
         email,
         password,
       });
 
       alert("Parabéns, você criou sua conta");
-      navigate("/chatbot");
+      navigate("/");
     } catch (e) {
       //
     }
