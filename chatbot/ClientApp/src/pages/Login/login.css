@@ -64,18 +64,18 @@ form.login-form input {
 }
 
 .loginBtn:hover {
-  color: #181818;
+  letter-spacing: 0.2rem;
   box-shadow: 0 7px 14px rgba(0, 0, 0, 0.18), 0 5px 5px rgba(0, 0, 0, 0.12);
-}
-
-.createAcc:hover {
-  color: #526f43;
-  cursor: pointer;
 }
 
 .createAcc {
   color: #ffffff;
   font-size: smaller;
+}
+
+.createAcc:hover {
+  color: #526f43;
+  cursor: pointer;
 }
 
 .create-container {

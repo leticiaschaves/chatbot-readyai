@@ -5,6 +5,7 @@ import axios from "axios";
 import { FaRegUserCircle } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 
+
 const api = axios.create({
   baseURL: "https://aiready.azurewebsites.net",
 });
@@ -46,12 +47,13 @@ export const LoginPage = () => {
         <h3>Login</h3>
         <div className="emailLabel">
           <label>
-          <FaRegUserCircle className="iconLabel" />
+            <FaRegUserCircle className="iconLabel" />
             <input
               type="email"
               className="inputLabel"
               required
               value={email}
+              placeholder="Digite seu e-mail"
               onChange={(event) => {
                 setEmail(event.target.value);
               }}
@@ -60,9 +62,10 @@ export const LoginPage = () => {
         </div>
         <div className="passwordLabel">
           <label>
-          <RiLockPasswordFill className="iconLabel" />
+            <RiLockPasswordFill className="iconLabel" />
             <input
               type="password"
+              placeholder="Digite sua senha"
               className="passwordLabel"
               required
               value={password}
@@ -76,9 +79,9 @@ export const LoginPage = () => {
           Entrar
         </button>
         <div className="create-container">
-        <a className="createAcc" type="button" onClick={handleSignUp}>
-        Ainda não criou sua conta?
-        </a>
+          <a className="createAcc" type="button" onClick={handleSignUp}>
+            Ainda não criou sua conta?
+          </a>
         </div>
       </form>
     </main>
