@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
 import axios from "axios";
+import { FaRegUserCircle } from "react-icons/fa";
+import { RiLockPasswordFill } from "react-icons/ri";
+
 
 const api = axios.create({
   baseURL: "https://aiready.azurewebsites.net",
@@ -41,27 +44,29 @@ export const LoginPage = () => {
   return (
     <main className="main-page">
       <form className="login-form" onSubmit={handleLogin}>
-        <h3>Entrar</h3>
-
-        <div>
+        <h3>Login</h3>
+        <div className="emailLabel">
           <label>
-            E-mail:
+            <FaRegUserCircle className="iconLabel" />
             <input
               type="email"
+              className="inputLabel"
               required
               value={email}
+              placeholder="Digite seu e-mail"
               onChange={(event) => {
                 setEmail(event.target.value);
               }}
             />
           </label>
         </div>
-
-        <div>
+        <div className="passwordLabel">
           <label>
-            Senha:
+            <RiLockPasswordFill className="iconLabel" />
             <input
               type="password"
+              placeholder="Digite sua senha"
+              className="passwordLabel"
               required
               value={password}
               onChange={(event) => {
@@ -70,16 +75,14 @@ export const LoginPage = () => {
             />
           </label>
         </div>
-
-        <button type="submit" disabled={loading}>
+        <button className="loginBtn" type="submit" disabled={loading}>
           Entrar
         </button>
-
-        <p>Ainda não criou sua conta?</p>
-
-        <button type="button" onClick={handleSignUp}>
-          Criar conta
-        </button>
+        <div className="create-container">
+          <a className="createAcc" type="button" onClick={handleSignUp}>
+            Ainda não criou sua conta?
+          </a>
+        </div>
       </form>
     </main>
   );

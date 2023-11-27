@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import WaveSurfer from 'wavesurfer.js'
-import { FaPlayCircle, FaPauseCircle } from 'react-icons/fa'
+import { FaPlay, FaPause } from 'react-icons/fa'
 import './waveform.css'
 
 const Waveform = ({ audio }) => {
@@ -49,7 +49,7 @@ const Waveform = ({ audio }) => {
         type="button"
         className="play-button"
       >
-        { isPlaying ? <FaPauseCircle className="pause-icon"/> : <FaPlayCircle className="play-icon" /> }
+        { isPlaying ? <FaPause className="pause-icon"/> : <FaPlay className="play-icon" /> }
       </button>
       <div ref={containerRef} style={{width: '100%'}}/>
     </div>
