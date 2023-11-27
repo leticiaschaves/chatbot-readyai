@@ -9,11 +9,11 @@ import { getAllChats } from "./api.js";
 const ChatHistoryList = ({ chatsHistory, handleRemoveChatHistory }) => {
   return (
     <ul className="chats-list-sidebar">
-      {chatsHistory.map(({ id, chatTitle, loading }) => (
+      {chatsHistory.map(({ id, title, loading }) => (
         <li key={id} className="chats-list-listing">
           <a href={`?chat-id=${id}`}>
             <HiOutlineChatAlt style={{ fontSize: '17px' }} />
-            <span>{chatTitle}</span>
+            <span>{title}</span>
             <button className="remove-chat"
               onClick={(e) => {
                 e.preventDefault();
