@@ -16,6 +16,7 @@
     "classnames": "^2.3.2",
     "firebase": "^10.6.0",
     "nanoid": "^5.0.2",
+    "query-string": "^8.1.0",
     "react": "^18.2.0",
     "react-audio-waveform": "^0.0.5",
     "react-dom": "^18.2.0",

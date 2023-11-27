@@ -4,6 +4,7 @@ import "./login.css";
 import axios from "axios";
 import { FaRegUserCircle } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
+import { useEffect } from "react";
 
 
 const api = axios.create({
@@ -21,17 +22,23 @@ export const LoginPage = () => {
     setLoading(true);
 
     try {
-      // Envia uma solicitação de login com email e senha
-      await api.get("/users/", {
-        email,
-        password,
-      });
-
-      alert("Login bem-sucedido!");
-      navigate("/chatbot"); // Redireciona para a página de Chatbot após um login bem-sucedido
+      const response = await api.get("/users/");
+      const userData = response.data;
+      
+      const foundUser = userData.find((user) => user.email === email);
+      
+      if (foundUser) {
+        const loggedInUserId = foundUser.id;
+        localStorage.setItem("loggedInUserId", loggedInUserId);
+        localStorage.setItem("userLogin", JSON.stringify(foundUser));
+        alert("Login bem-sucedido!");
+        navigate("/chatbot");
+      } else {
+        alert("Usuário não encontrado. Verifique seu email e senha.");
+      }
     } catch (error) {
       alert("Erro no login. Verifique seu email e senha e tente novamente.");
-      navigate("/chatbot"); // Redireciona pro chatbot de ser errado tbm pq ta com problema do cors
+      console.error(error);
     }
 
     setLoading(false);
