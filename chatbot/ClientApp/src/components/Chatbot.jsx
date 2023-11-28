@@ -66,18 +66,19 @@
     };
 
 
+    //recupera os chats da api
     const getChatsFromAPI = async () => {
       try {
         const response = await axios.get("https://aiready.azurewebsites.net/chats/");
         const data = response.data;
         console.log("Chats obtidos da API:", data);
-    
+
         const userId = getUserChats();
         console.log('userId', userId)
-    
+
         //filtra apenas os chats do owner_id
         const chatsWithId = response.data.filter(chat => chat.owner_id === userId);
-    
+
         //fusca as mensagens para cada chat 
         const chatsWithMessages = await Promise.all(
           chatsWithId.map(async (chat) => {
@@ -96,13 +97,13 @@
     const getMessagesForChat = async (chatId) => {
       try {
         const response = await axios.get(`https://aiready.azurewebsites.net/chats/`);
-        const userId = getUserChats();
-        return response.data.find(({ owner_id }) => owner_id === userId)
+        return response.data;
       } catch (error) {
         console.error(`Erro ao buscar mensagens do chat ${chatId}:`, error);
         return [];
       }
     };
+    
 
     useEffect(() => {
       getChatsFromAPI(); //busca os chats do owner_id quando a página eh recarregada
