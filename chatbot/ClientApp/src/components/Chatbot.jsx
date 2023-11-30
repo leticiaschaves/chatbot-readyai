@@ -21,12 +21,9 @@
     const [chatsHistory, setChatsHistory] = useState([]);
 
     const handleLogout = () => {
-      // Limpar dados do usuário atualmente logado
       localStorage.removeItem('userLogin');
       localStorage.removeItem('loggedInUserId');
-  
-      // Redirecionar para a página de login
-      navigate('/login'); // Altere '/login' para o caminho da sua página de login
+      navigate('/'); 
     };
   
 

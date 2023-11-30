@@ -277,7 +277,7 @@ body {
   opacity: 0.75;
 }
 
-/* Estilo do botão de gravação de audio*/
+
 .form-button.recording {
   background-color: #e74c3c; 
   color: #fff;
@@ -285,7 +285,6 @@ body {
   animation: blinking 1s infinite;
 }
 
-/*Animação do botão de gravação de audio*/
 @keyframes blinking {
   0% {
     opacity: 1;
