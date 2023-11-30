@@ -1,44 +1,3 @@
-  import React, { useEffect, useRef } from "react";
-  import { useState } from "react";
-  import { nanoid } from "nanoid";
-  import { HiOutlinePlus } from "react-icons/hi";
-  import { HiOutlineTrash } from "react-icons/hi";
-  import { HiArrowCircleLeft } from "react-icons/hi"
-  import axios from 'axios';
-  import ChatInput from "./ChatInput";
-  import ChatHistoryList from "./ChatHistoryList";
-  import ChatMessage from "./ChatMessage";
-  import "./Chatbot.css";
-  import { useChat } from '../utils/Chat/ChatFunctions';
-  import { useNavigate } from 'react-router-dom';
-
-  const Chatbot = () => {
-    const navigate = useNavigate();
-    const uploaderRef = useRef(null);
-    const { chats, setChats, sendMessage, fetchAndDisplayResponse, handleAudioTranscription } = useChat();
-    const [chatInput, setChatInput] = useState("");
-    const [audioRecording, setAudioRecording] = useState(null);
-    const [chatsHistory, setChatsHistory] = useState([]);
-
-    const handleLogout = () => {
-      localStorage.removeItem('userLogin');
-      localStorage.removeItem('loggedInUserId');
-      navigate('/'); 
-    };
-  
-
-    const userLogin = JSON.parse(localStorage.getItem('userLogin'));
-
-    const getUserChats = () => {
-      const loggedInUserId = JSON.parse(localStorage.getItem('loggedInUserId'));
-      return loggedInUserId;
-    };
-
-    const disabled = chats.find((chat) => chat.sending);
-
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { nanoid } from "nanoid";
@@ -50,8 +9,11 @@ import ChatHistoryList from "./ChatHistoryList";
 import ChatMessage from "./ChatMessage";
 import "./Chatbot.css";
 import { useChat } from '../utils/Chat/ChatFunctions';
+import { HiArrowCircleLeft } from "react-icons/hi";
+import { useNavigate } from 'react-router-dom';
 
 const Chatbot = () => {
+  const navigate = useNavigate();
   const uploaderRef = useRef(null);
   const { chats, setChats, sendMessage, fetchAndDisplayResponse, handleAudioTranscription } = useChat();
   const [chatInput, setChatInput] = useState("");
@@ -65,11 +27,20 @@ const Chatbot = () => {
     },
   ]);
 
+  const handleLogout = () => {
+    // Limpar dados do usuário atualmente logado
+    localStorage.removeItem('userLogin');
+    localStorage.removeItem('loggedInUserId');
+
+    // Redirecionar para a página de login
+    navigate('/login'); // Altere '/login' para o caminho da sua página de login
+  };
+
   const userLogin = JSON.parse(localStorage.getItem('userLogin'));
 
   const getUserChats = () => {
     // const loggedInUserId = JSON.parse(localStorage.getItem('loggedInUserId'));
-    const loggedInUserId = 1;
+    const loggedInUserId = 2;
     return loggedInUserId;
   };
 
@@ -191,40 +162,6 @@ const Chatbot = () => {
     }
     //atualiza a lista de chats dps de enviar um novo chat para a API
   };
-  
-    return (
-      <main className="main-page">
-        <aside className="sidebar">
-          <button type="button" className="new-chat" onClick={handleCreateChatHistory}>
-            <HiOutlinePlus style={{ fontSize: '15px' }} />
-            Novo Chat
-          </button>
-          <button type="button" className="delete">
-            <HiOutlineTrash style={{ fontSize: '15px' }} />
-            Apagar tudo
-          </button>
-          <ChatHistoryList
-            chatsHistory={chatsHistory}
-            handleRemoveChatHistory={handleRemoveChatHistory}
-          />
-           <button type="button" className="logout" onClick={handleLogout}>
-            <HiArrowCircleLeft style={{fontSize:'20px'}}/>
-          Logout
-        </button>
-        </aside>
-        <div className="main-chat-wrapper">
-          <ChatMessage chats={chats} audioRecording={audioRecording} />
-          <ChatInput
-            chatInput={chatInput}
-            setChatInput={setChatInput}
-            uploaderRef={uploaderRef}
-            handleSubmit={handleSubmit}
-            handleAudioTranscription={handleAudioTranscription}
-          />
-        </div>
-        <input ref={uploaderRef} type="file" style={{ display: 'none' }} onChange={handleFileUpload} />
-      </main>
-    );
 
   const handleSendMessage = async (chatId, message) => {
     const userId = getUserChats();
@@ -268,10 +205,14 @@ const Chatbot = () => {
           chatsHistory={chatsHistory}
           handleRemoveChatHistory={handleRemoveChatHistory}
         />
+        <button type="button" className="logout" onClick={handleLogout}>
+          <HiArrowCircleLeft style={{ fontSize: '20px' }} />
+          Logout
+        </button>
       </aside>
       <div className="main-chat-wrapper">
         {chatsHistory ?
-            <ChatMessage chats={chatsHistory} />
+          <ChatMessage chats={chatsHistory} />
           :
           <ChatMessage chats={chats} audioRecording={audioRecording} />
         }
