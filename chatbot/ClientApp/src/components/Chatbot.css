@@ -49,25 +49,15 @@ body {
 }
 
 .logout {
-    background-color: #424242;
     position: absolute;
     color: white;
     width: 12.5%;
-    height: 4.5%;
+    width: 1.5%;
     bottom: 2%;
+}
 }
 
 .sidebar > button {
-  display: flex;
-  align-items: center;
-  justify-content: baseline;
-  padding: 0.5rem;
-  gap: 16px;
-  border-radius: 4px;
-  font-size: 0.75rem;
-}
-
-.chats-list-sidebar {
   display: flex;
   flex-direction: column;
   justify-content: baseline;
@@ -209,7 +199,7 @@ body {
   margin-right: 8px;
   margin-left: auto;
 }
-
+  background-color: #526f43;
 .message.me span {
   overflow: overlay;
   text-align: end;
@@ -237,7 +227,7 @@ body {
   right: -24px;
 }
 
-.message.bot .state {
+.message.bot > svg {
   left: -24px;
 }
 
@@ -280,7 +270,7 @@ body {
 
 
 .form-button.recording {
-  background-color: #e74c3c; 
+  background-color: #e74c3c;
   color: #fff;
   padding: 5px 18px;
   animation: blinking 1s infinite;
@@ -300,6 +290,5 @@ body {
 
 @keyframes spin {
   100% {
-    transform: rotate(360deg);
   }
 }

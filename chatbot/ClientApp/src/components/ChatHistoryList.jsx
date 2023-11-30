@@ -4,10 +4,8 @@ import {
   HiOutlineChatAlt,
   HiOutlineTrash,
 } from "react-icons/hi";
-import { getAllChats } from "./api.js";
 
 const ChatHistoryList = ({ chatsHistory, handleRemoveChatHistory }) => {
-  console.log('chatsHistory', chatsHistory);
   return (
     <ul className="chats-list-sidebar">
       {chatsHistory.map(({ id, title, loading }) => (
