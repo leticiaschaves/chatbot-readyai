@@ -15,14 +15,7 @@ const Chatbot = () => {
   const { chats, setChats, sendMessage, fetchAndDisplayResponse, handleAudioTranscription } = useChat();
   const [chatInput, setChatInput] = useState("");
   const [audioRecording, setAudioRecording] = useState(null);
-  const [chatsHistory, setChatsHistory] = useState([
-    {
-      title: "Como usar o chatbot",
-      createdAt: Date.now(),
-      id: nanoid(),
-      loading: false,
-    },
-  ]);
+  const [chatsHistory, setChatsHistory] = useState([]);
 
   const userLogin = JSON.parse(localStorage.getItem('userLogin'));
 
@@ -124,7 +117,7 @@ const Chatbot = () => {
 
   const sendMessageToChat = async (chatId, messageData) => {
     try {
-      const response = await axios.post(`https://aiready.azurewebsites.net/messages?chat_id=${chatId}`, messageData);
+      const response = await axios.post(`https://aiready.azurewebsites.net/messages/?chat_id=${chatId}`, messageData);
       console.log("Mensagem enviada para o chat:", response.data);
       await getChatsFromAPI();
     } catch (error) {
@@ -154,9 +147,7 @@ const Chatbot = () => {
   const handleSendMessage = async (chatId, message) => {
     const userId = getUserChats();
     const messageData = {
-      text: message,
-      timestamp: Date.now(),
-      sender_id: userId,
+      content: message,
     };
     try {
       await sendMessageToChat(chatId, messageData);
