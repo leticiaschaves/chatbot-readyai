@@ -46,6 +46,16 @@ body {
   color: #9eb293;
 }
 
+.logout {
+    background-color: transparent;
+    border: 1px solid #9eb293;
+    padding: 0.5rem;
+    position: absolute;
+    color: #9eb293;
+    width: 10.5%;
+    bottom: 0%;
+}
+
 .sidebar > button {
   display: flex;
   align-items: center;
@@ -267,7 +277,7 @@ body {
   opacity: 0.75;
 }
 
-/* Estilo do botão de gravação de audio*/
+
 .form-button.recording {
   background-color: #e74c3c; 
   color: #fff;
@@ -275,7 +285,6 @@ body {
   animation: blinking 1s infinite;
 }
 
-/*Animação do botão de gravação de audio*/
 @keyframes blinking {
   0% {
     opacity: 1;
