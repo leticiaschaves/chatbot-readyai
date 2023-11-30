@@ -39,8 +39,7 @@ const Chatbot = () => {
   const userLogin = JSON.parse(localStorage.getItem('userLogin'));
 
   const getUserChats = () => {
-    // const loggedInUserId = JSON.parse(localStorage.getItem('loggedInUserId'));
-    const loggedInUserId = 2;
+    const loggedInUserId = JSON.parse(localStorage.getItem('loggedInUserId'));
     return loggedInUserId;
   };
 
@@ -84,13 +83,11 @@ const Chatbot = () => {
     try {
       const response = await axios.get("https://aiready.azurewebsites.net/chats/");
       const data = response.data;
-      console.log("Chats obtidos da API:", data);
 
       const userId = getUserChats();
-      console.log('userId', userId)
 
       //filtra apenas os chats do owner_id
-      const chatsWithId = response.data.filter(chat => chat.owner_id === userId);
+      const chatsWithId = data.filter(chat => chat.owner_id === userId);
 
       //fusca as mensagens para cada chat 
       const chatsWithMessages = await Promise.all(
@@ -100,7 +97,6 @@ const Chatbot = () => {
           return chatWithMessages;
         })
       );
-      console.log(chatsWithMessages);
       setChatsHistory(chatsWithMessages); //atualiza o estado dos chats com as mensagens obtidas da API
     } catch (error) {
       console.error("Erro ao buscar chats da API:", error);
@@ -127,8 +123,7 @@ const Chatbot = () => {
     try {
       const userId = getUserChats();
       const response = await axios.post(`https://aiready.azurewebsites.net/users/${userId}/chats/`, chatData);
-      console.log("Chat enviado para a API:", response.data);
-      await getChatsFromAPI(); //depois enviar o chat para a API, buscar dnv os chats do owner_id
+      await getChatsFromAPI();
     } catch (error) {
       console.error("Erro ao enviar o chat para a API:", error);
     }
@@ -137,7 +132,6 @@ const Chatbot = () => {
   const sendMessageToChat = async (chatId, messageData) => {
     try {
       const response = await axios.post(`https://aiready.azurewebsites.net/messages?chat_id=${chatId}`, messageData);
-      console.log("Mensagem enviada para o chat:", response.data);
       await getChatsFromAPI();
     } catch (error) {
       console.error("Erro ao enviar a mensagem para o chat:", error);
@@ -146,7 +140,7 @@ const Chatbot = () => {
 
   const handleCreateChatHistory = async () => {
     const userId = getUserChats();
-    const title = "New Chat";
+    const title = "Novo chat";
     const description = "---------";
     const newChat = {
       title: title,
@@ -183,8 +177,7 @@ const Chatbot = () => {
       const file = uploaderRef.current?.files[0];
       formData.append("file", file);
 
-      const response = await axios.post("https://aiready.azurewebsites.net/uploadfile/", formData, { headers: { "Content-Type": "application/pdf" } });
-      console.log(response.data);
+      await axios.post("https://aiready.azurewebsites.net/uploadfile/", formData, { headers: { "Content-Type": "application/pdf" } });
     } catch (error) {
       console.error("Erro ao enviar arquivo:", error);
     }

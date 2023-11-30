@@ -8,7 +8,6 @@ const ChatMessage = ({ chats }) => {
   const getChatIdFromUrl = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const chatId = urlParams.get('chat-id');
-    console.log('chatId', chatId);
     return chatId;
   };
 
