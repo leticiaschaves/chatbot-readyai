@@ -3,26 +3,32 @@
   import { nanoid } from "nanoid";
   import { HiOutlinePlus } from "react-icons/hi";
   import { HiOutlineTrash } from "react-icons/hi";
+  import { HiArrowCircleLeft } from "react-icons/hi"
   import axios from 'axios';
   import ChatInput from "./ChatInput";
   import ChatHistoryList from "./ChatHistoryList";
   import ChatMessage from "./ChatMessage";
   import "./Chatbot.css";
   import { useChat } from '../utils/Chat/ChatFunctions';
+  import { useNavigate } from 'react-router-dom';
 
   const Chatbot = () => {
+    const navigate = useNavigate();
     const uploaderRef = useRef(null);
     const { chats, setChats, sendMessage, fetchAndDisplayResponse, handleAudioTranscription } = useChat();
     const [chatInput, setChatInput] = useState("");
     const [audioRecording, setAudioRecording] = useState(null);
-    const [chatsHistory, setChatsHistory] = useState([
-      {
-        title: "Como usar o chatbot",
-        createdAt: Date.now(),
-        id: nanoid(),
-        loading: false,
-      },
-    ]);
+    const [chatsHistory, setChatsHistory] = useState([]);
+
+    const handleLogout = () => {
+      // Limpar dados do usuário atualmente logado
+      localStorage.removeItem('userLogin');
+      localStorage.removeItem('loggedInUserId');
+  
+      // Redirecionar para a página de login
+      navigate('/login'); // Altere '/login' para o caminho da sua página de login
+    };
+  
 
     const userLogin = JSON.parse(localStorage.getItem('userLogin'));
 
@@ -190,6 +196,10 @@
             chatsHistory={chatsHistory}
             handleRemoveChatHistory={handleRemoveChatHistory}
           />
+           <button type="button" className="logout" onClick={handleLogout}>
+            <HiArrowCircleLeft style={{fontSize:'20px'}}/>
+          Logout
+        </button>
         </aside>
         <div className="main-chat-wrapper">
           <ChatMessage chats={chats} audioRecording={audioRecording} />

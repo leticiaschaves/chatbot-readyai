@@ -46,6 +46,16 @@ body {
   color: #9eb293;
 }
 
+.logout {
+    background-color: transparent;
+    border: 1px solid #9eb293;
+    padding: 0.5rem;
+    position: absolute;
+    color: #9eb293;
+    width: 10.5%;
+    bottom: 0%;
+}
+
 .sidebar > button {
   display: flex;
   align-items: center;
