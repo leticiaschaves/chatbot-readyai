@@ -16,7 +16,7 @@ body {
 
 .main-page {
   display: flex;
-  background-color: #2d2d2d;
+  background-color: #424242;
   height: 100%;
   width: 100%;
 }
@@ -28,32 +28,33 @@ body {
 .sidebar {
   display: flex;
   flex-flow: column;
-  width: 15rem;
-  background-color: #181818;
+  width: 17rem;
+  background-color: #212121;
   gap: 1rem;
   padding: 16px;
 }
 
 .new-chat {
-  background-color: #526f43;
+  background-color: #424242;
   color: white;
+  width: 100%;
+  height: 4.5%;
 }
 
 .delete {
   background-color: transparent;
-  border: 1px solid #9eb293;
+  border: 1px solid #424242;
   padding: 0.5rem;
   color: #9eb293;
 }
 
 .logout {
-    background-color: transparent;
-    border: 1px solid #9eb293;
-    padding: 0.5rem;
+    background-color: #424242;
     position: absolute;
-    color: #9eb293;
-    width: 10.5%;
-    bottom: 0%;
+    color: white;
+    width: 12.5%;
+    height: 4.5%;
+    bottom: 2%;
 }
 
 .sidebar > button {
@@ -198,7 +199,7 @@ body {
   position: relative;
   padding: 12px 24px;
   border-radius: 12px;
-  background-color: #526f43;
+  background-color: #55ff00;
   font-size: 0.875rem;
 }
 

@@ -21,19 +21,16 @@ const Chatbot = () => {
   const [chatsHistory, setChatsHistory] = useState([]);
 
   const handleLogout = () => {
-    // Limpar dados do usuário atualmente logado
     localStorage.removeItem('userLogin');
     localStorage.removeItem('loggedInUserId');
 
-    // Redirecionar para a página de login
-    navigate('/login'); // Altere '/login' para o caminho da sua página de login
+    navigate('/'); 
   };
 
   const userLogin = JSON.parse(localStorage.getItem('userLogin'));
 
   const getUserChats = () => {
-    // const loggedInUserId = JSON.parse(localStorage.getItem('loggedInUserId'));
-    const loggedInUserId = 2;
+    const loggedInUserId = JSOSN.parse(localStorage.getItem('loggedInUserId'));
     return loggedInUserId;
   };
 
@@ -188,10 +185,7 @@ const Chatbot = () => {
           <HiOutlinePlus style={{ fontSize: '15px' }} />
           Novo Chat
         </button>
-        <button type="button" className="delete">
-          <HiOutlineTrash style={{ fontSize: '15px' }} />
-          Apagar tudo
-        </button>
+        
         <ChatHistoryList
           chatsHistory={chatsHistory}
           handleRemoveChatHistory={handleRemoveChatHistory}
