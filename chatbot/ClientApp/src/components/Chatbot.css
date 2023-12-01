@@ -21,7 +21,7 @@ body {
   width: 100%;
 }
 
-.main-page>input[type="file"] {
+.main-page > input[type="file"] {
   display: none;
 }
 
@@ -47,16 +47,16 @@ body {
 }
 
 .logout {
-  background-color: transparent;
-  border: 1px solid #9eb293;
-  padding: 0.5rem;
-  color: #9eb293;
-  position: absolute;
-  width: 15%;
-  bottom: 3%;
+    background-color: transparent;
+    border: 1px solid #9eb293;
+    padding: 0.5rem;
+    position: absolute;
+    color: #9eb293;
+    width: 10.5%;
+    bottom: 0%;
 }
 
-.sidebar>button {
+.sidebar > button {
   display: flex;
   align-items: center;
   justify-content: baseline;
@@ -226,7 +226,7 @@ body {
   text-align: start;
 }
 
-.message.bot>svg {
+.message.bot > svg {
   fill: #ffffff80;
   margin-top: 2px;
   margin-right: 8px;
@@ -279,7 +279,7 @@ body {
 
 
 .form-button.recording {
-  background-color: #e74c3c;
+  background-color: #e74c3c; 
   color: #fff;
   padding: 5px 18px;
   animation: blinking 1s infinite;
@@ -289,11 +289,9 @@ body {
   0% {
     opacity: 1;
   }
-
   50% {
     opacity: 0;
   }
-
   100% {
     opacity: 1;
   }

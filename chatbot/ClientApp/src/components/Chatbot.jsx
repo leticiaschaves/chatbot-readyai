@@ -18,22 +18,13 @@ const Chatbot = () => {
   const { chats, setChats, sendMessage, fetchAndDisplayResponse, handleAudioTranscription } = useChat();
   const [chatInput, setChatInput] = useState("");
   const [audioRecording, setAudioRecording] = useState(null);
-  const [chatsHistory, setChatsHistory] = useState([
-    {
-      title: "Como usar o chatbot",
-      createdAt: Date.now(),
-      id: nanoid(),
-      loading: false,
-    },
-  ]);
+  const [chatsHistory, setChatsHistory] = useState([]);
 
   const handleLogout = () => {
-    // Limpar dados do usuário atualmente logado
     localStorage.removeItem('userLogin');
     localStorage.removeItem('loggedInUserId');
 
-    // Redirecionar para a página de login
-    navigate('/login'); // Altere '/login' para o caminho da sua página de login
+    navigate('/'); 
   };
 
   const userLogin = JSON.parse(localStorage.getItem('userLogin'));
@@ -131,7 +122,8 @@ const Chatbot = () => {
 
   const sendMessageToChat = async (chatId, messageData) => {
     try {
-      const response = await axios.post(`https://aiready.azurewebsites.net/messages?chat_id=${chatId}`, messageData);
+      const response = await axios.post(`https://aiready.azurewebsites.net/messages/?chat_id=${chatId}`, messageData);
+      console.log("Mensagem enviada para o chat:", response.data);
       await getChatsFromAPI();
     } catch (error) {
       console.error("Erro ao enviar a mensagem para o chat:", error);
@@ -160,9 +152,7 @@ const Chatbot = () => {
   const handleSendMessage = async (chatId, message) => {
     const userId = getUserChats();
     const messageData = {
-      text: message,
-      timestamp: Date.now(),
-      sender_id: userId,
+      content: message,
     };
     try {
       await sendMessageToChat(chatId, messageData);
@@ -190,10 +180,7 @@ const Chatbot = () => {
           <HiOutlinePlus style={{ fontSize: '15px' }} />
           Novo Chat
         </button>
-        <button type="button" className="delete">
-          <HiOutlineTrash style={{ fontSize: '15px' }} />
-          Apagar tudo
-        </button>
+        
         <ChatHistoryList
           chatsHistory={chatsHistory}
           handleRemoveChatHistory={handleRemoveChatHistory}
